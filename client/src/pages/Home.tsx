@@ -1,31 +1,70 @@
-import { useAuth } from "@/_core/hooks/useAuth";
-import { Button } from "@/components/ui/button";
+import { useState, useMemo } from "react";
+import { trpc } from "@/lib/trpc";
+import EventMap from "@/components/EventMap";
+import CategoryFilter from "@/components/CategoryFilter";
+import EventDetails from "@/components/EventDetails";
+import { Event } from "../../../drizzle/schema";
 import { Loader2 } from "lucide-react";
-import { getLoginUrl } from "@/const";
-import { Streamdown } from 'streamdown';
 
-/**
- * All content in this page are only for example, replace with your own feature implementation
- * When building pages, remember your instructions in Frontend Workflow, Frontend Best Practices, Design Guide and Common Pitfalls
- */
 export default function Home() {
-  // The userAuth hooks provides authentication state
-  // To implement login/logout functionality, simply call logout() or redirect to getLoginUrl()
-  let { user, loading, error, isAuthenticated, logout } = useAuth();
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [isFilterCollapsed, setIsFilterCollapsed] = useState(false);
 
-  // If theme is switchable in App.tsx, we can implement theme toggling like this:
-  // const { theme, toggleTheme } = useTheme();
+  // Fetch all events
+  const { data: events, isLoading: eventsLoading } = trpc.events.list.useQuery();
+  
+  // Fetch categories
+  const { data: categories, isLoading: categoriesLoading } = trpc.events.categories.useQuery();
+
+  // Filter events based on selected category
+  const filteredEvents = useMemo(() => {
+    if (!events) return [];
+    if (!selectedCategory) return events;
+    return events.filter((event) => event.category === selectedCategory);
+  }, [events, selectedCategory]);
+
+  const handleEventClick = (event: Event) => {
+    setSelectedEvent(event);
+  };
+
+  const handleCloseDetails = () => {
+    setSelectedEvent(null);
+  };
+
+  if (eventsLoading || categoriesLoading) {
+    return (
+      <div className="h-screen w-screen flex items-center justify-center bg-background">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
+          <p className="text-muted-foreground">Loading events map...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <main>
-        {/* Example: lucide-react for icons */}
-        <Loader2 className="animate-spin" />
-        Example Page
-        {/* Example: Streamdown for markdown rendering */}
-        <Streamdown>Any **markdown** content</Streamdown>
-        <Button variant="default">Example Button</Button>
-      </main>
+    <div className="h-screen w-screen flex overflow-hidden">
+      {/* Left Panel - Category Filter */}
+      <CategoryFilter
+        categories={categories || []}
+        selectedCategory={selectedCategory}
+        onCategorySelect={setSelectedCategory}
+        isCollapsed={isFilterCollapsed}
+        onToggleCollapse={() => setIsFilterCollapsed(!isFilterCollapsed)}
+      />
+
+      {/* Center - Map */}
+      <div className="flex-1 relative">
+        <EventMap
+          events={filteredEvents}
+          onEventClick={handleEventClick}
+          selectedEventId={selectedEvent?.id}
+        />
+      </div>
+
+      {/* Right Panel - Event Details */}
+      <EventDetails event={selectedEvent} onClose={handleCloseDetails} />
     </div>
   );
 }

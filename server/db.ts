@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, events, InsertEvent, Event } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,80 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// Events query helpers
+
+export async function createEvent(event: InsertEvent): Promise<Event> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const result = await db.insert(events).values(event);
+  const insertedId = Number(result[0].insertId);
+  
+  const inserted = await db.select().from(events).where(eq(events.id, insertedId)).limit(1);
+  if (!inserted[0]) {
+    throw new Error("Failed to retrieve inserted event");
+  }
+  
+  return inserted[0];
+}
+
+export async function getAllEvents(): Promise<Event[]> {
+  const db = await getDb();
+  if (!db) {
+    return [];
+  }
+
+  return db.select().from(events).orderBy(desc(events.eventDate));
+}
+
+export async function getEventsByCategory(category: string): Promise<Event[]> {
+  const db = await getDb();
+  if (!db) {
+    return [];
+  }
+
+  return db.select().from(events).where(eq(events.category, category)).orderBy(desc(events.eventDate));
+}
+
+export async function getEventById(id: number): Promise<Event | undefined> {
+  const db = await getDb();
+  if (!db) {
+    return undefined;
+  }
+
+  const result = await db.select().from(events).where(eq(events.id, id)).limit(1);
+  return result[0];
+}
+
+export async function updateEvent(id: number, updates: Partial<InsertEvent>): Promise<Event | undefined> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  await db.update(events).set(updates).where(eq(events.id, id));
+  return getEventById(id);
+}
+
+export async function deleteEvent(id: number): Promise<boolean> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  await db.delete(events).where(eq(events.id, id));
+  return true;
+}
+
+export async function getEventCategories(): Promise<string[]> {
+  const db = await getDb();
+  if (!db) {
+    return [];
+  }
+
+  const result = await db.select({ category: events.category }).from(events);
+  const uniqueCategories = Array.from(new Set(result.map(r => r.category)));
+  return uniqueCategories.sort();
+}

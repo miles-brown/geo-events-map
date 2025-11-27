@@ -1,10 +1,12 @@
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
-import { publicProcedure, router } from "./_core/trpc";
+import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
+import { z } from "zod";
+import * as db from "./db";
+import { TRPCError } from "@trpc/server";
 
 export const appRouter = router({
-    // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
@@ -17,12 +19,100 @@ export const appRouter = router({
     }),
   }),
 
-  // TODO: add feature routers here, e.g.
-  // todo: router({
-  //   list: protectedProcedure.query(({ ctx }) =>
-  //     db.getUserTodos(ctx.user.id)
-  //   ),
-  // }),
+  events: router({
+    // Get all events
+    list: publicProcedure.query(async () => {
+      return db.getAllEvents();
+    }),
+
+    // Get events by category
+    byCategory: publicProcedure
+      .input(z.object({ category: z.string() }))
+      .query(async ({ input }) => {
+        return db.getEventsByCategory(input.category);
+      }),
+
+    // Get single event by ID
+    byId: publicProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ input }) => {
+        const event = await db.getEventById(input.id);
+        if (!event) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Event not found",
+          });
+        }
+        return event;
+      }),
+
+    // Get all unique categories
+    categories: publicProcedure.query(async () => {
+      return db.getEventCategories();
+    }),
+
+    // Create new event (protected - requires authentication)
+    create: protectedProcedure
+      .input(
+        z.object({
+          title: z.string().min(1),
+          description: z.string().min(1),
+          category: z.string().min(1),
+          eventDate: z.date(),
+          latitude: z.string(),
+          longitude: z.string(),
+          locationName: z.string().min(1),
+          videoUrl: z.string().url(),
+          thumbnailUrl: z.string().url().optional(),
+          sourceUrl: z.string().url().optional(),
+          peopleInvolved: z.string().optional(),
+          backgroundInfo: z.string().optional(),
+          details: z.string().optional(),
+          isCrime: z.boolean().default(false),
+          isVerified: z.boolean().default(false),
+        })
+      )
+      .mutation(async ({ input, ctx }) => {
+        return db.createEvent({
+          ...input,
+          createdBy: ctx.user.id,
+        });
+      }),
+
+    // Update event (protected)
+    update: protectedProcedure
+      .input(
+        z.object({
+          id: z.number(),
+          title: z.string().min(1).optional(),
+          description: z.string().min(1).optional(),
+          category: z.string().min(1).optional(),
+          eventDate: z.date().optional(),
+          latitude: z.string().optional(),
+          longitude: z.string().optional(),
+          locationName: z.string().min(1).optional(),
+          videoUrl: z.string().url().optional(),
+          thumbnailUrl: z.string().url().optional(),
+          sourceUrl: z.string().url().optional(),
+          peopleInvolved: z.string().optional(),
+          backgroundInfo: z.string().optional(),
+          details: z.string().optional(),
+          isCrime: z.boolean().optional(),
+          isVerified: z.boolean().optional(),
+        })
+      )
+      .mutation(async ({ input }) => {
+        const { id, ...updates } = input;
+        return db.updateEvent(id, updates);
+      }),
+
+    // Delete event (protected)
+    delete: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        return db.deleteEvent(input.id);
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;
