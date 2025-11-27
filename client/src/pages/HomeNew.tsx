@@ -7,7 +7,7 @@ import { Event } from "../../../drizzle/schema";
 import type { TimePeriod } from "@shared/categories";
 import { Loader2 } from "lucide-react";
 
-export default function Home() {
+export default function HomeNew() {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [filterCollapsed, setFilterCollapsed] = useState(false);
   const [detailsVisible, setDetailsVisible] = useState(false);
@@ -31,9 +31,11 @@ export default function Home() {
 
   const handleCloseDetails = () => {
     setDetailsVisible(false);
+    // Keep event selected for visual feedback on map
   };
 
   useEffect(() => {
+    // Auto-show details panel when event is selected
     if (selectedEvent) {
       setDetailsVisible(true);
     }

@@ -44,10 +44,10 @@ export default function EventDetails({ event, onClose }: EventDetailsProps) {
   const embedUrl = event.videoUrl ? getVideoEmbedUrl(event.videoUrl) : null;
 
   return (
-    <div className="bg-card border-l border-border h-full w-96 flex flex-col">
+    <div className="bg-slate-950/90 backdrop-blur-md border-l border-blue-500/30 h-full w-96 flex flex-col shadow-2xl">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-border">
-        <h2 className="font-semibold text-lg">Event Details</h2>
+      <div className="flex items-center justify-between p-4 border-b border-blue-500/30 bg-slate-900/50">
+        <h2 className="font-semibold text-lg tracking-wider text-blue-400">EVENT DETAILS</h2>
         <Button variant="ghost" size="icon" onClick={onClose}>
           <X className="h-4 w-4" />
         </Button>
@@ -57,7 +57,7 @@ export default function EventDetails({ event, onClose }: EventDetailsProps) {
         <div className="p-4 space-y-4">
           {/* Video Player */}
           {embedUrl && (
-            <div className="aspect-video bg-muted rounded-lg overflow-hidden">
+            <div className="aspect-video bg-slate-900 rounded-lg overflow-hidden border border-blue-500/20">
               <iframe
                 src={embedUrl}
                 className="w-full h-full"

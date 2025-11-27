@@ -73,3 +73,31 @@
 - [x] Implement video file upload (up to 25MB)
 - [x] Store uploaded videos in S3
 - [x] Test all admin CRUD operations
+
+## Category System Overhaul
+- [x] Update database schema to support subcategories and multiple tags
+- [x] Define comprehensive category hierarchy (Crime, Transport, Fire, Emergency, Weather, Social Media, Public Event, Celebrity, Strange, Construction)
+- [x] Create subcategories for each main category
+- [x] Update backend API to support hierarchical filtering
+- [x] Build time period filter (month, 6 months, year, 5 years, 10 years, specific year/decade)
+- [x] Create expandable category filter UI with subcategories
+- [x] Remove "Paranormal" category
+- [x] Update admin form with new category/subcategory selection
+- [x] Allow multiple categories/subcategories per event
+
+## Map Improvements
+- [x] Redesign pin icons with smaller precision points
+- [x] Create distinct pin styles for each category
+- [x] Implement map clustering for dense areas
+- [x] Display cluster count when pins overlap
+- [x] Add cluster expansion on click
+
+## UI/UX Enhancements
+- [x] Create modern, sleek military/CIA-style interface design
+- [x] Add smooth animated transitions between pin selections
+- [x] Implement animated map panning when clicking pins
+- [x] Add glassmorphism effects and modern shadows
+- [x] Create futuristic color scheme with accent colors
+- [x] Add loading animations and transitions
+- [x] Implement smooth panel slide animations
+- [x] Add hover effects and micro-interactions

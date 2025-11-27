@@ -7,6 +7,7 @@ import * as db from "./db";
 import { TRPCError } from "@trpc/server";
 import { storagePut } from "./storage";
 import { nanoid } from "nanoid";
+import { CATEGORIES, TIME_PERIODS } from "@shared/categories";
 
 export const appRouter = router({
   system: systemRouter,
@@ -22,10 +23,20 @@ export const appRouter = router({
   }),
 
   events: router({
-    // Get all events
-    list: publicProcedure.query(async () => {
-      return db.getAllEvents();
-    }),
+    // Get all events with optional filtering
+    list: publicProcedure
+      .input(
+        z.object({
+          categories: z.array(z.string()).optional(),
+          subcategories: z.array(z.string()).optional(),
+          timePeriod: z.enum(["month", "6months", "year", "5years", "10years", "all"]).optional(),
+          startDate: z.date().optional(),
+          endDate: z.date().optional(),
+        }).optional()
+      )
+      .query(async ({ input }) => {
+        return db.getFilteredEvents(input || {});
+      }),
 
     // Get events by category
     byCategory: publicProcedure
@@ -60,6 +71,8 @@ export const appRouter = router({
           title: z.string().min(1),
           description: z.string().min(1),
           category: z.string().min(1),
+          subcategories: z.array(z.string()).optional(),
+          tags: z.array(z.string()).optional(),
           eventDate: z.date(),
           latitude: z.string(),
           longitude: z.string(),
@@ -78,7 +91,7 @@ export const appRouter = router({
         return db.createEvent({
           ...input,
           createdBy: ctx.user.id,
-        });
+        } as any);
       }),
 
     // Update event (protected)
@@ -89,6 +102,8 @@ export const appRouter = router({
           title: z.string().min(1).optional(),
           description: z.string().min(1).optional(),
           category: z.string().min(1).optional(),
+          subcategories: z.array(z.string()).optional(),
+          tags: z.array(z.string()).optional(),
           eventDate: z.date().optional(),
           latitude: z.string().optional(),
           longitude: z.string().optional(),
@@ -105,7 +120,7 @@ export const appRouter = router({
       )
       .mutation(async ({ input }) => {
         const { id, ...updates } = input;
-        return db.updateEvent(id, updates);
+        return db.updateEvent(id, updates as any);
       }),
 
     // Delete event (protected)

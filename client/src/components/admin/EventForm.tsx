@@ -10,6 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, X, Upload } from "lucide-react";
 import { Event } from "../../../../drizzle/schema";
 import { toast } from "sonner";
+import { CATEGORIES } from "@shared/categories";
 
 interface EventFormProps {
   event: Event | null;
@@ -172,11 +173,11 @@ export default function EventForm({ event, onClose }: EventFormProps) {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="crime">Crime</SelectItem>
-                    <SelectItem value="accident">Accident</SelectItem>
-                    <SelectItem value="paranormal">Paranormal</SelectItem>
-                    <SelectItem value="protest">Protest</SelectItem>
-                    <SelectItem value="strange">Strange</SelectItem>
+                    {CATEGORIES.map((cat) => (
+                      <SelectItem key={cat.id} value={cat.id}>
+                        {cat.icon} {cat.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>

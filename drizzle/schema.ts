@@ -34,7 +34,9 @@ export const events = mysqlTable("events", {
   // Event details
   title: varchar("title", { length: 255 }).notNull(),
   description: text("description").notNull(),
-  category: varchar("category", { length: 100 }).notNull(), // e.g., "crime", "paranormal", "accident", "protest", etc.
+  category: varchar("category", { length: 100 }).notNull(), // Primary category e.g., "crime", "transport", "fire"
+  subcategories: text("subcategories"), // JSON array of subcategory IDs e.g., ["fights", "brawls"]
+  tags: text("tags"), // JSON array of additional tags for flexible categorization
   eventDate: timestamp("eventDate").notNull(), // When the event occurred
   
   // Location data
