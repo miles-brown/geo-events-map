@@ -3,6 +3,7 @@ import { trpc } from "@/lib/trpc";
 import EventMap from "@/components/EventMap";
 import CategoryFilter from "@/components/CategoryFilter";
 import EventDetails from "@/components/EventDetails";
+import MapLegend from "@/components/MapLegend";
 import { Event } from "../../../drizzle/schema";
 import { Loader2 } from "lucide-react";
 
@@ -54,13 +55,14 @@ export default function Home() {
         onToggleCollapse={() => setIsFilterCollapsed(!isFilterCollapsed)}
       />
 
-      {/* Center - Map */}
+      {/* Map */}
       <div className="flex-1 relative">
         <EventMap
           events={filteredEvents}
           onEventClick={handleEventClick}
           selectedEventId={selectedEvent?.id}
         />
+        <MapLegend />
       </div>
 
       {/* Right Panel - Event Details */}

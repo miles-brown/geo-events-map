@@ -41,3 +41,11 @@
 ## New Features
 - [x] Research 10 real unusual documented events from London
 - [x] Add real events to database with accurate details and video sources
+
+## Bug Fixes
+- [x] Investigate and fix events not displaying on map
+
+## UI Enhancements
+- [x] Add different colored pins for each event category
+- [x] Add different pin styles for each event type
+- [x] Add map legend showing event types and colors
