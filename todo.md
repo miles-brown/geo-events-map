@@ -37,3 +37,7 @@
 - [x] Set up database connection
 - [x] Configure video hosting
 - [ ] Deploy application
+
+## New Features
+- [x] Research 10 real unusual documented events from London
+- [x] Add real events to database with accurate details and video sources
