@@ -43,7 +43,7 @@ export const events = mysqlTable("events", {
   locationName: varchar("locationName", { length: 255 }).notNull(), // e.g., "Camden Town, London"
   
   // Media
-  videoUrl: text("videoUrl").notNull(), // URL to the video source
+  videoUrl: text("videoUrl"), // URL to the video source (optional)
   thumbnailUrl: text("thumbnailUrl"), // Optional thumbnail image
   
   // Additional context

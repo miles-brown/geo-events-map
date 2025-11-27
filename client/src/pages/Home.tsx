@@ -67,6 +67,14 @@ export default function Home() {
 
       {/* Right Panel - Event Details */}
       <EventDetails event={selectedEvent} onClose={handleCloseDetails} />
+
+      {/* Admin Login Link */}
+      <a
+        href="/admin"
+        className="fixed bottom-4 right-4 text-xs text-muted-foreground hover:text-foreground transition-colors underline z-[1000]"
+      >
+        Admin Login
+      </a>
     </div>
   );
 }

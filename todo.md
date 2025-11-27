@@ -62,3 +62,14 @@
 - [x] Import data to Supabase
 - [x] Update application DATABASE_URL to Supabase
 - [x] Verify all events display correctly after migration
+
+## Admin Panel
+- [x] Add "Admin Login" link to main site
+- [x] Create admin authentication route
+- [x] Build admin panel UI with event list
+- [x] Create event creation form with all fields
+- [x] Create event editing functionality
+- [x] Create event deletion functionality
+- [x] Implement video file upload (up to 25MB)
+- [x] Store uploaded videos in S3
+- [x] Test all admin CRUD operations

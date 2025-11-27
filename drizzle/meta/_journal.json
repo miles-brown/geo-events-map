@@ -15,6 +15,13 @@
       "when": 1764239628548,
       "tag": "0001_stale_trish_tilby",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1764275630109,
+      "tag": "0002_optimal_doctor_faustus",
+      "breakpoints": true
     }
   ]
 }

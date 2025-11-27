@@ -5,6 +5,8 @@ import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import * as db from "./db";
 import { TRPCError } from "@trpc/server";
+import { storagePut } from "./storage";
+import { nanoid } from "nanoid";
 
 export const appRouter = router({
   system: systemRouter,
@@ -62,7 +64,7 @@ export const appRouter = router({
           latitude: z.string(),
           longitude: z.string(),
           locationName: z.string().min(1),
-          videoUrl: z.string().url(),
+          videoUrl: z.string().optional(),
           thumbnailUrl: z.string().url().optional(),
           sourceUrl: z.string().url().optional(),
           peopleInvolved: z.string().optional(),
@@ -111,6 +113,37 @@ export const appRouter = router({
       .input(z.object({ id: z.number() }))
       .mutation(async ({ input }) => {
         return db.deleteEvent(input.id);
+      }),
+    
+    // Upload video file (protected)
+    uploadVideo: protectedProcedure
+      .input(
+        z.object({
+          filename: z.string(),
+          contentType: z.string(),
+          data: z.string(), // base64 encoded
+        })
+      )
+      .mutation(async ({ input, ctx }) => {
+        if (ctx.user.role !== "admin") {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Only admins can upload videos",
+          });
+        }
+        
+        // Decode base64
+        const base64Data = input.data.split(",")[1] || input.data;
+        const buffer = Buffer.from(base64Data, "base64");
+        
+        // Generate unique filename
+        const ext = input.filename.split(".").pop();
+        const key = `videos/${nanoid()}.${ext}`;
+        
+        // Upload to S3
+        const result = await storagePut(key, buffer, input.contentType);
+        
+        return { url: result.url, key: result.key };
       }),
   }),
 });

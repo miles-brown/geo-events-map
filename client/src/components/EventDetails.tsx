@@ -41,7 +41,7 @@ export default function EventDetails({ event, onClose }: EventDetailsProps) {
     return url;
   };
 
-  const embedUrl = getVideoEmbedUrl(event.videoUrl);
+  const embedUrl = event.videoUrl ? getVideoEmbedUrl(event.videoUrl) : null;
 
   return (
     <div className="bg-card border-l border-border h-full w-96 flex flex-col">
@@ -56,15 +56,17 @@ export default function EventDetails({ event, onClose }: EventDetailsProps) {
       <ScrollArea className="flex-1">
         <div className="p-4 space-y-4">
           {/* Video Player */}
-          <div className="aspect-video bg-muted rounded-lg overflow-hidden">
-            <iframe
-              src={embedUrl}
-              className="w-full h-full"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              title={event.title}
-            />
-          </div>
+          {embedUrl && (
+            <div className="aspect-video bg-muted rounded-lg overflow-hidden">
+              <iframe
+                src={embedUrl}
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title={event.title}
+              />
+            </div>
+          )}
 
           {/* Title and Category */}
           <div>
