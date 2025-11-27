@@ -49,3 +49,16 @@
 - [x] Add different colored pins for each event category
 - [x] Add different pin styles for each event type
 - [x] Add map legend showing event types and colors
+
+## Current Issues
+- [x] Debug why events are not displaying on user's map
+- [x] Verify database connection is working
+- [x] Check API endpoints are returning data
+
+## Database Migration
+- [x] Create new Supabase project
+- [x] Set up events table schema in Supabase
+- [x] Export current database data
+- [x] Import data to Supabase
+- [x] Update application DATABASE_URL to Supabase
+- [x] Verify all events display correctly after migration
