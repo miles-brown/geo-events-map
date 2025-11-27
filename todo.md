@@ -101,3 +101,10 @@
 - [x] Add loading animations and transitions
 - [x] Implement smooth panel slide animations
 - [x] Add hover effects and micro-interactions
+
+## Bug Fixes - Right Panel
+- [x] Fix right details panel not appearing when pin is clicked
+- [x] Add smooth slide-in animation for details panel
+- [x] Make map shift leftward when panel opens
+- [x] Ensure panel is scrollable for long content
+- [x] Verify video player displays and works correctly

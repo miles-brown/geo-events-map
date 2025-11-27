@@ -76,7 +76,7 @@ export default function Home() {
       </header>
 
       {/* Main content */}
-      <div className="flex-1 flex relative">
+      <div className="flex-1 flex relative overflow-hidden">
         {/* Category Filter Panel */}
         <div className={`transition-all duration-300 ease-in-out ${filterCollapsed ? 'w-12' : 'w-80'} relative z-20`}>
           <CategoryFilterNew
@@ -92,7 +92,7 @@ export default function Home() {
         </div>
 
         {/* Map Container */}
-        <div className="flex-1 relative">
+        <div className={`flex-1 relative transition-all duration-300 ease-in-out ${detailsVisible ? 'mr-[480px]' : 'mr-0'}`}>
           {isLoading ? (
             <div className="absolute inset-0 flex items-center justify-center bg-slate-950/50 backdrop-blur-sm z-30">
               <div className="flex flex-col items-center gap-4">
@@ -127,7 +127,7 @@ export default function Home() {
 
         {/* Event Details Panel */}
         <div
-          className={`absolute right-0 top-0 h-full transition-transform duration-300 ease-in-out z-20 ${
+          className={`fixed right-0 top-[73px] bottom-0 w-[480px] transition-transform duration-300 ease-in-out z-30 ${
             detailsVisible ? 'translate-x-0' : 'translate-x-full'
           }`}
         >
