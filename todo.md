@@ -159,3 +159,51 @@
 - [x] Auto-detect borough from coordinates in admin panel
 - [x] Add manual override option for borough selection
 - [x] Show detected borough with confidence indicator
+
+## Event Heatmap Visualization
+- [ ] Add heatmap layer toggle to map interface
+- [ ] Implement heatmap rendering with color gradients
+- [ ] Show event density patterns across London
+- [ ] Add heatmap intensity controls
+- [ ] Integrate with time period filtering
+
+## CSV Bulk Import
+- [ ] Create CSV upload interface in admin panel
+- [ ] Parse and validate CSV data
+- [ ] Support batch event creation
+- [ ] Add error handling and validation feedback
+- [ ] Provide CSV template download
+
+## Event Sharing
+- [ ] Generate unique URLs for each event
+- [ ] Add share buttons to event details panel
+- [ ] Support social media sharing (Twitter, Facebook, WhatsApp)
+- [ ] Implement deep linking to specific events
+- [ ] Add copy-to-clipboard functionality
+
+## Event Heatmap Visualization
+- [x] Install leaflet.heat plugin for heatmap rendering
+- [x] Add heatmap layer toggle button in map controls
+- [x] Implement heatmap rendering with color gradients (blue → green → yellow → red)
+- [x] Show event density patterns across London
+- [x] Add heatmap intensity slider control
+- [x] Integrate heatmap with time period filtering
+- [x] Add smooth transitions when toggling heatmap on/off
+
+## CSV Bulk Import
+- [x] Create CSV upload interface in admin panel
+- [x] Add CSV file picker with drag-and-drop support
+- [x] Parse and validate CSV data (title, description, lat, lon, date, category, etc.)
+- [x] Support batch event creation with progress indicator
+- [x] Add detailed error handling and validation feedback
+- [x] Provide downloadable CSV template with example data
+- [x] Show import summary (success count, error count, skipped)
+
+## Event Sharing
+- [x] Generate unique URLs for each event (/event/:id)
+- [x] Add share buttons to event details panel
+- [x] Support social media sharing (Twitter, Facebook, WhatsApp, LinkedIn)
+- [x] Implement deep linking to open specific events on page load
+- [x] Add copy-to-clipboard functionality with toast confirmation
+- [ ] Generate Open Graph meta tags for rich social media previews
+- [ ] Add QR code generation for event URLs

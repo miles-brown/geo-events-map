@@ -12,9 +12,10 @@ interface EventMapProps {
   events: Event[];
   selectedEvent: Event | null;
   onEventSelect: (event: Event) => void;
+  onMapReady?: (map: L.Map) => void;
 }
 
-export default function EventMapNew({ events, selectedEvent, onEventSelect }: EventMapProps) {
+export default function EventMapNew({ events, selectedEvent, onEventSelect, onMapReady }: EventMapProps) {
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<Map<number, L.Marker>>(new Map());
   const clusterGroupRef = useRef<L.MarkerClusterGroup | null>(null);
@@ -33,6 +34,11 @@ export default function EventMapNew({ events, selectedEvent, onEventSelect }: Ev
       attribution: '© OpenStreetMap contributors',
       maxZoom: 19,
     }).addTo(map);
+
+    // Notify parent component that map is ready
+    if (onMapReady) {
+      onMapReady(map);
+    }
 
     // Initialize marker cluster group
     const clusterGroup = L.markerClusterGroup({

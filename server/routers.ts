@@ -132,6 +132,92 @@ export const appRouter = router({
       .mutation(async ({ input }) => {
         return db.deleteEvent(input.id);
       }),
+
+    // Bulk create events from CSV (protected)
+    bulkCreate: protectedProcedure
+      .input(
+        z.object({
+          events: z.array(
+            z.object({
+              title: z.string(),
+              description: z.string(),
+              category: z.string(),
+              subcategories: z.string().optional(),
+              tags: z.string().optional(),
+              eventDate: z.string(),
+              latitude: z.string(),
+              longitude: z.string(),
+              locationName: z.string(),
+              borough: z.string().optional(),
+              videoUrl: z.string().optional(),
+              sourceUrl: z.string().optional(),
+              peopleInvolved: z.string().optional(),
+              backgroundInfo: z.string().optional(),
+              details: z.string().optional(),
+              isCrime: z.string().optional(),
+            })
+          ),
+        })
+      )
+      .mutation(async ({ input, ctx }) => {
+        if (ctx.user.role !== "admin") {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Only admins can bulk import events",
+          });
+        }
+
+        const results = {
+          success: 0,
+          errors: 0,
+          total: input.events.length,
+          errorDetails: [] as string[],
+        };
+
+        for (let index = 0; index < input.events.length; index++) {
+          const event = input.events[index];
+          try {
+            // Parse subcategories and tags from comma-separated strings
+            const subcategories = event.subcategories
+              ? event.subcategories.split(',').map((s: string) => s.trim())
+              : [];
+            const tags = event.tags
+              ? event.tags.split(',').map((t: string) => t.trim())
+              : [];
+
+            // Create event
+            await db.createEvent({
+              title: event.title,
+              description: event.description,
+              category: event.category,
+              subcategories: subcategories.length > 0 ? subcategories : undefined,
+              tags: tags.length > 0 ? tags : undefined,
+              eventDate: new Date(event.eventDate),
+              latitude: event.latitude,
+              longitude: event.longitude,
+              locationName: event.locationName,
+              borough: event.borough || null,
+              videoUrl: event.videoUrl || null,
+              sourceUrl: event.sourceUrl || null,
+              peopleInvolved: event.peopleInvolved || null,
+              backgroundInfo: event.backgroundInfo || null,
+              details: event.details || null,
+              isCrime: event.isCrime === 'true' || event.isCrime === '1',
+              isVerified: false,
+              createdBy: ctx.user.id,
+            } as any);
+
+            results.success++;
+          } catch (error: any) {
+            results.errors++;
+            results.errorDetails.push(
+              `Row ${index + 2}: ${error.message || 'Unknown error'}`
+            );
+          }
+        }
+
+        return results;
+      }),
     
     // Upload video file (protected)
     uploadVideo: protectedProcedure

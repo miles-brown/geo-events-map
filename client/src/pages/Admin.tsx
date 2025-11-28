@@ -4,9 +4,10 @@ import { getLoginUrl } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Plus, Pencil, Trash2, ArrowLeft } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, ArrowLeft, Upload } from "lucide-react";
 import { Link } from "wouter";
 import EventForm from "@/components/admin/EventForm";
+import CSVImport from "@/components/admin/CSVImport";
 import { Event } from "../../../drizzle/schema";
 import { toast } from "sonner";
 
@@ -14,6 +15,7 @@ export default function Admin() {
   const { user, loading, isAuthenticated } = useAuth();
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [isCreating, setIsCreating] = useState(false);
+  const [showCSVImport, setShowCSVImport] = useState(false);
 
   const { data: events, isLoading: eventsLoading, refetch } = trpc.events.list.useQuery();
   const deleteEvent = trpc.events.delete.useMutation({
@@ -116,6 +118,10 @@ export default function Admin() {
               <Plus className="h-4 w-4 mr-2" />
               Add Event
             </Button>
+            <Button onClick={() => setShowCSVImport(true)} variant="outline">
+              <Upload className="h-4 w-4 mr-2" />
+              Import CSV
+            </Button>
             <Button asChild variant="outline">
               <Link href="/">
                 <ArrowLeft className="h-4 w-4 mr-2" />
@@ -175,6 +181,17 @@ export default function Admin() {
           </div>
         )}
       </div>
+      
+      {/* CSV Import Modal */}
+      {showCSVImport && (
+        <CSVImport
+          onClose={() => setShowCSVImport(false)}
+          onSuccess={() => {
+            setShowCSVImport(false);
+            refetch();
+          }}
+        />
+      )}
     </div>
   );
 }

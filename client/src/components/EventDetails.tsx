@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { X, MapPin, Calendar, ExternalLink, Users, AlertCircle } from "lucide-react";
+import { X, MapPin, Calendar, ExternalLink, Users, AlertCircle, Share2 } from "lucide-react";
 import { Event } from "../../../drizzle/schema";
 import { format } from "date-fns";
 
@@ -46,14 +46,28 @@ export default function EventDetails({ event, onClose }: EventDetailsProps) {
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-blue-500/30 bg-slate-900/50 flex-shrink-0">
         <h2 className="font-bold text-lg tracking-wider text-blue-400 uppercase">Event Details</h2>
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          onClick={onClose}
-          className="hover:bg-blue-500/20 hover:text-blue-300 transition-colors"
-        >
-          <X className="h-5 w-5 text-slate-400" />
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={() => {
+              const url = `${window.location.origin}/event/${event.id}`;
+              navigator.clipboard.writeText(url);
+            }}
+            className="hover:bg-blue-500/20 hover:text-blue-300 transition-colors"
+            title="Copy share link"
+          >
+            <Share2 className="h-5 w-5 text-slate-400" />
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={onClose}
+            className="hover:bg-blue-500/20 hover:text-blue-300 transition-colors"
+          >
+            <X className="h-5 w-5 text-slate-400" />
+          </Button>
+        </div>
       </div>
 
       {/* Scrollable Content */}

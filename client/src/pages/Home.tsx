@@ -5,8 +5,10 @@ import CategoryFilterNew from "@/components/CategoryFilterNew";
 import EventDetails from "@/components/EventDetails";
 import Timeline from "@/components/Timeline";
 import CIAEffects from "@/components/CIAEffects";
+import Heatmap from "@/components/Heatmap";
 import { Button } from "@/components/ui/button";
-import { Clock } from "lucide-react";
+import { Slider } from "@/components/ui/slider";
+import { Clock, Flame } from "lucide-react";
 import { Event } from "../../../drizzle/schema";
 import type { TimePeriod } from "@shared/categories";
 import { Loader2 } from "lucide-react";
@@ -18,6 +20,9 @@ export default function Home() {
   const [timelineMode, setTimelineMode] = useState(true); // Timeline enabled by default
   const [isTimelinePlaying, setIsTimelinePlaying] = useState(false);
   const [visibleEventIds, setVisibleEventIds] = useState<number[]>([]);
+  const [heatmapEnabled, setHeatmapEnabled] = useState(false);
+  const [heatmapIntensity, setHeatmapIntensity] = useState(1.0);
+  const [mapInstance, setMapInstance] = useState<L.Map | null>(null);
   
   // Filter states
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -99,6 +104,19 @@ export default function Home() {
               {timelineMode ? 'Hide Timeline' : 'Show Timeline'}
             </Button>
             
+            {/* Heatmap Toggle */}
+            <Button
+              variant="outline"
+              size="sm"
+              className={`h-8 border-orange-500/30 hover:bg-orange-500/10 hover:border-orange-500/50 ${
+                heatmapEnabled ? 'bg-orange-500/20 border-orange-500/50' : ''
+              }`}
+              onClick={() => setHeatmapEnabled(!heatmapEnabled)}
+            >
+              <Flame className="h-4 w-4 mr-2" />
+              {heatmapEnabled ? 'Hide Heatmap' : 'Show Heatmap'}
+            </Button>
+            
             <a
               href="/admin"
               className="text-sm text-blue-400 hover:text-blue-300 transition-colors tracking-wider"
@@ -142,6 +160,15 @@ export default function Home() {
                 events={displayedEvents}
                 selectedEvent={selectedEvent}
                 onEventSelect={handleEventSelect}
+                onMapReady={setMapInstance}
+              />
+              
+              {/* Heatmap Layer */}
+              <Heatmap
+                map={mapInstance}
+                events={events || []}
+                enabled={heatmapEnabled}
+                intensity={heatmapIntensity}
               />
 
               {/* Timeline Overlay */}
