@@ -138,3 +138,24 @@
 - [x] Create event caption box that appears with each pin
 - [x] Add speed controls for timeline playback
 - [x] Sync map animations with timeline events
+
+## Advanced CIA Visual Effects
+- [x] Add scan line overlay effect
+- [x] Implement glitch animations on text and borders
+- [x] Create HUD-style corner brackets and overlays
+- [x] Add matrix-style data stream effects
+- [x] Add pulsing grid background
+- [x] Implement chromatic aberration effects
+- [x] Add tactical status indicators
+
+## Timeline Toggle
+- [x] Add timeline toggle button in header
+- [x] Implement smooth show/hide animation for timeline
+- [ ] Save timeline state in local storage
+- [x] Add visual indicator when timeline is active
+
+## Auto-Borough Detection
+- [x] Integrate reverse geocoding API
+- [x] Auto-detect borough from coordinates in admin panel
+- [x] Add manual override option for borough selection
+- [x] Show detected borough with confidence indicator

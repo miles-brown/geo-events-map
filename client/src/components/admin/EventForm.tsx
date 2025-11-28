@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,8 @@ import { Loader2, X, Upload } from "lucide-react";
 import { Event } from "../../../../drizzle/schema";
 import { toast } from "sonner";
 import { CATEGORIES } from "@shared/categories";
+import { LONDON_BOROUGHS } from "@shared/boroughs";
+import { detectBorough } from "@/lib/geocoding";
 
 interface EventFormProps {
   event: Event | null;
@@ -26,6 +28,7 @@ export default function EventForm({ event, onClose }: EventFormProps) {
     latitude: event?.latitude || "",
     longitude: event?.longitude || "",
     locationName: event?.locationName || "",
+    borough: event?.borough || "",
     videoUrl: event?.videoUrl || "",
     sourceUrl: event?.sourceUrl || "",
     peopleInvolved: event?.peopleInvolved || "",
@@ -34,9 +37,32 @@ export default function EventForm({ event, onClose }: EventFormProps) {
     isCrime: event?.isCrime || false,
   });
 
+  const [detectedBorough, setDetectedBorough] = useState<string | null>(null);
+  const [boroughConfidence, setBoroughConfidence] = useState<"high" | "medium" | "low" | null>(null);
+  const [isDetectingBorough, setIsDetectingBorough] = useState(false);
+
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Auto-detect borough when coordinates change
+  useEffect(() => {
+    const lat = parseFloat(formData.latitude);
+    const lon = parseFloat(formData.longitude);
+
+    if (!isNaN(lat) && !isNaN(lon) && lat !== 0 && lon !== 0) {
+      setIsDetectingBorough(true);
+      detectBorough(lat, lon)
+        .then(({ borough, confidence }) => {
+          setDetectedBorough(borough);
+          setBoroughConfidence(confidence);
+          if (borough && !formData.borough) {
+            setFormData((prev) => ({ ...prev, borough }));
+          }
+        })
+        .finally(() => setIsDetectingBorough(false));
+    }
+  }, [formData.latitude, formData.longitude]);
 
   const createEvent = trpc.events.create.useMutation({
     onSuccess: () => {
@@ -233,6 +259,44 @@ export default function EventForm({ event, onClose }: EventFormProps) {
                   placeholder="-0.1278"
                 />
               </div>
+            </div>
+
+            {/* Borough with Auto-Detection */}
+            <div className="space-y-2">
+              <Label htmlFor="borough">London Borough</Label>
+              <div className="flex gap-2 items-start">
+                <div className="flex-1">
+                  <Select
+                    value={formData.borough}
+                    onValueChange={(value) => setFormData({ ...formData, borough: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select borough" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {LONDON_BOROUGHS.map((borough) => (
+                        <SelectItem key={borough} value={borough}>
+                          {borough}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                {isDetectingBorough && (
+                  <div className="flex items-center text-sm text-muted-foreground">
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                    Detecting...
+                  </div>
+                )}
+              </div>
+              {detectedBorough && boroughConfidence && (
+                <p className="text-sm text-muted-foreground">
+                  Auto-detected: <span className="font-medium">{detectedBorough}</span>
+                  <span className="ml-2 text-xs">
+                    (Confidence: {boroughConfidence})
+                  </span>
+                </p>
+              )}
             </div>
 
             {/* Video Upload */}

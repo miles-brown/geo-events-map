@@ -4,6 +4,9 @@ import EventMapNew from "@/components/EventMapNew";
 import CategoryFilterNew from "@/components/CategoryFilterNew";
 import EventDetails from "@/components/EventDetails";
 import Timeline from "@/components/Timeline";
+import CIAEffects from "@/components/CIAEffects";
+import { Button } from "@/components/ui/button";
+import { Clock } from "lucide-react";
 import { Event } from "../../../drizzle/schema";
 import type { TimePeriod } from "@shared/categories";
 import { Loader2 } from "lucide-react";
@@ -60,6 +63,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col relative overflow-hidden">
+      {/* CIA Visual Effects */}
+      <CIAEffects />
       {/* Animated background grid */}
       <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-to-br from-blue-950/20 via-slate-950 to-cyan-950/20 pointer-events-none" />
@@ -80,13 +85,23 @@ export default function Home() {
           </div>
           
           <div className="flex items-center gap-4">
-            <div className="hidden md:flex items-center gap-2 text-sm">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <span className="text-slate-400">SYSTEM ONLINE</span>
-            </div>
+            <span className="status-indicator"></span>
+            <span className="text-sm text-green-400 tracking-wider">SYSTEM ONLINE</span>
+            
+            {/* Timeline Toggle */}
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 border-blue-500/30 hover:bg-blue-500/10 hover:border-blue-500/50"
+              onClick={() => setTimelineMode(!timelineMode)}
+            >
+              <Clock className="h-4 w-4 mr-2" />
+              {timelineMode ? 'Hide Timeline' : 'Show Timeline'}
+            </Button>
+            
             <a
               href="/admin"
-              className="text-xs text-blue-400 hover:text-blue-300 transition-colors tracking-wider"
+              className="text-sm text-blue-400 hover:text-blue-300 transition-colors tracking-wider"
             >
               ADMIN ACCESS
             </a>
