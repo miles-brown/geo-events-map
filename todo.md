@@ -108,3 +108,33 @@
 - [x] Make map shift leftward when panel opens
 - [x] Ensure panel is scrollable for long content
 - [x] Verify video player displays and works correctly
+
+## Backend Improvements
+- [x] Improve event editing interface in admin panel
+- [x] Ensure all edits sync properly to Supabase database
+- [x] Add real-time validation for event data
+- [x] Improve error handling and user feedback
+
+## London Borough Filtering
+- [x] Add borough field to database schema
+- [x] Create list of 32 London Boroughs + City of London
+- [x] Add borough filter to API endpoints
+- [x] Add borough dropdown to filter UI
+- [ ] Auto-detect borough from coordinates when possible
+
+## CIA/Military UI Enhancements
+- [ ] Add advanced animations (glitch effects, scan lines, data streams)
+- [x] Implement sound effects for hover interactions
+- [x] Add sound effects for click/select actions
+- [ ] Create tactical HUD-style overlays
+- [ ] Add matrix-style data visualization effects
+- [ ] Improve color scheme with neon accents
+
+## Timeline Mode
+- [x] Create timeline view component
+- [x] Add play/pause button for timeline playback
+- [x] Implement automatic pin addition as timeline progresses
+- [x] Add timeline scrubber for manual navigation
+- [x] Create event caption box that appears with each pin
+- [x] Add speed controls for timeline playback
+- [x] Sync map animations with timeline events

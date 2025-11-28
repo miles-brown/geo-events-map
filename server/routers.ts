@@ -32,6 +32,7 @@ export const appRouter = router({
           timePeriod: z.enum(["month", "6months", "year", "5years", "10years", "all"]).optional(),
           startDate: z.date().optional(),
           endDate: z.date().optional(),
+          boroughs: z.array(z.string()).optional(),
         }).optional()
       )
       .query(async ({ input }) => {
@@ -77,6 +78,7 @@ export const appRouter = router({
           latitude: z.string(),
           longitude: z.string(),
           locationName: z.string().min(1),
+          borough: z.string().optional(),
           videoUrl: z.string().optional(),
           thumbnailUrl: z.string().url().optional(),
           sourceUrl: z.string().url().optional(),
@@ -108,6 +110,7 @@ export const appRouter = router({
           latitude: z.string().optional(),
           longitude: z.string().optional(),
           locationName: z.string().min(1).optional(),
+          borough: z.string().optional(),
           videoUrl: z.string().url().optional(),
           thumbnailUrl: z.string().url().optional(),
           sourceUrl: z.string().url().optional(),

@@ -5,14 +5,18 @@ import { Badge } from "@/components/ui/badge";
 import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 import { CATEGORIES, TIME_PERIODS, type TimePeriod } from "@shared/categories";
+import { LONDON_BOROUGHS } from "@shared/boroughs";
+import { soundEffects } from "@/lib/sounds";
 
 interface CategoryFilterProps {
   selectedCategories: string[];
   selectedSubcategories: string[];
   selectedTimePeriod: TimePeriod;
+  selectedBoroughs: string[];
   onCategoryChange: (categories: string[]) => void;
   onSubcategoryChange: (subcategories: string[]) => void;
   onTimePeriodChange: (period: TimePeriod) => void;
+  onBoroughChange: (boroughs: string[]) => void;
   isCollapsed: boolean;
   onToggleCollapse: () => void;
 }
@@ -21,15 +25,19 @@ export default function CategoryFilterNew({
   selectedCategories,
   selectedSubcategories,
   selectedTimePeriod,
+  selectedBoroughs,
   onCategoryChange,
   onSubcategoryChange,
   onTimePeriodChange,
+  onBoroughChange,
   isCollapsed,
   onToggleCollapse,
 }: CategoryFilterProps) {
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
+  const [boroughsExpanded, setBoroughsExpanded] = useState(false);
 
   const toggleCategory = (categoryId: string) => {
+    soundEffects.click();
     const newSelected = selectedCategories.includes(categoryId)
       ? selectedCategories.filter(id => id !== categoryId)
       : [...selectedCategories, categoryId];
@@ -37,6 +45,7 @@ export default function CategoryFilterNew({
   };
 
   const toggleSubcategory = (subcategoryId: string) => {
+    soundEffects.click();
     const newSelected = selectedSubcategories.includes(subcategoryId)
       ? selectedSubcategories.filter(id => id !== subcategoryId)
       : [...selectedSubcategories, subcategoryId];
@@ -53,10 +62,19 @@ export default function CategoryFilterNew({
     setExpandedCategories(newExpanded);
   };
 
+  const toggleBorough = (borough: string) => {
+    soundEffects.click();
+    const newSelected = selectedBoroughs.includes(borough)
+      ? selectedBoroughs.filter(b => b !== borough)
+      : [...selectedBoroughs, borough];
+    onBoroughChange(newSelected);
+  };
+
   const clearAll = () => {
     onCategoryChange([]);
     onSubcategoryChange([]);
     onTimePeriodChange("all");
+    onBoroughChange([]);
   };
 
   if (isCollapsed) {
@@ -97,12 +115,75 @@ export default function CategoryFilterNew({
                   variant={selectedTimePeriod === period.id ? "default" : "outline"}
                   size="sm"
                   className={`w-full justify-start ${selectedTimePeriod === period.id ? "bg-blue-600 hover:bg-blue-700 border-blue-500" : "border-slate-700 hover:bg-slate-800 hover:border-blue-500/50"}`}
-                  onClick={() => onTimePeriodChange(period.id)}
+                  onClick={() => {
+                    soundEffects.select();
+                    onTimePeriodChange(period.id);
+                  }}
+                  onMouseEnter={() => soundEffects.hover()}
                 >
                   {period.label}
                 </Button>
               ))}
             </div>
+          </div>
+
+          <Separator />
+
+          {/* London Borough Filter */}
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-medium text-xs tracking-wider text-slate-400 uppercase">London Boroughs</h3>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6"
+                onClick={() => setBoroughsExpanded(!boroughsExpanded)}
+              >
+                {boroughsExpanded ? (
+                  <ChevronUp className="h-4 w-4" />
+                ) : (
+                  <ChevronDown className="h-4 w-4" />
+                )}
+              </Button>
+            </div>
+
+            {boroughsExpanded && (
+              <div className="space-y-1 max-h-64 overflow-y-auto">
+                {LONDON_BOROUGHS.map((borough) => {
+                  const isSelected = selectedBoroughs.includes(borough);
+                  return (
+                    <Button
+                      key={borough}
+                      variant={isSelected ? "default" : "ghost"}
+                      size="sm"
+                      className={`w-full justify-start text-xs ${
+                        isSelected
+                          ? "bg-cyan-600 hover:bg-cyan-700 border-cyan-500"
+                          : "hover:bg-slate-800 hover:border-blue-500/30 transition-all"
+                      }`}
+                      onClick={() => toggleBorough(borough)}
+                      onMouseEnter={() => soundEffects.hover()}
+                    >
+                      {borough}
+                    </Button>
+                  );
+                })}
+              </div>
+            )}
+
+            {selectedBoroughs.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-1">
+                {selectedBoroughs.map((borough) => (
+                  <Badge
+                    key={borough}
+                    variant="secondary"
+                    className="text-xs bg-cyan-600/20 border-cyan-500/50 text-cyan-300"
+                  >
+                    {borough}
+                  </Badge>
+                ))}
+              </div>
+            )}
           </div>
 
           <Separator />
@@ -140,6 +221,7 @@ export default function CategoryFilterNew({
                         size="sm"
                         className={`flex-1 justify-start gap-2 ${isSelected ? '' : 'hover:bg-slate-800/50 hover:border-blue-500/30 transition-all'}`}
                         onClick={() => toggleCategory(category.id)}
+                        onMouseEnter={() => soundEffects.hover()}
                         style={{
                           backgroundColor: isSelected ? category.color : undefined,
                           borderColor: isSelected ? category.color : 'rgba(51, 65, 85, 0.5)',
@@ -181,6 +263,7 @@ export default function CategoryFilterNew({
                               size="sm"
                               className="w-full justify-start text-xs hover:bg-slate-800 transition-colors"
                               onClick={() => toggleSubcategory(subcat.id)}
+                              onMouseEnter={() => soundEffects.hover()}
                             >
                               {subcat.label}
                             </Button>
@@ -197,10 +280,10 @@ export default function CategoryFilterNew({
       </ScrollArea>
 
       {/* Active Filters Summary */}
-      {(selectedCategories.length > 0 || selectedSubcategories.length > 0) && (
-        <div className="border-t border-border p-4">
-          <div className="text-xs text-muted-foreground mb-2">
-            Active: {selectedCategories.length} categories, {selectedSubcategories.length} subcategories
+      {(selectedCategories.length > 0 || selectedSubcategories.length > 0 || selectedBoroughs.length > 0) && (
+        <div className="border-t border-blue-500/30 p-4 bg-slate-900/30">
+          <div className="text-xs text-slate-400 mb-2 font-mono">
+            ACTIVE: {selectedCategories.length} categories, {selectedSubcategories.length} subcategories, {selectedBoroughs.length} boroughs
           </div>
         </div>
       )}

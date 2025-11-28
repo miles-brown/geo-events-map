@@ -43,6 +43,7 @@ export const events = mysqlTable("events", {
   latitude: varchar("latitude", { length: 50 }).notNull(), // Store as string to avoid precision issues
   longitude: varchar("longitude", { length: 50 }).notNull(),
   locationName: varchar("locationName", { length: 255 }).notNull(), // e.g., "Camden Town, London"
+  borough: varchar("borough", { length: 100 }), // London Borough e.g., "Camden", "Westminster"
   
   // Media
   videoUrl: text("videoUrl"), // URL to the video source (optional)

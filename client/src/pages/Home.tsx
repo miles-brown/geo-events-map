@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { trpc } from "@/lib/trpc";
 import EventMapNew from "@/components/EventMapNew";
 import CategoryFilterNew from "@/components/CategoryFilterNew";
 import EventDetails from "@/components/EventDetails";
+import Timeline from "@/components/Timeline";
 import { Event } from "../../../drizzle/schema";
 import type { TimePeriod } from "@shared/categories";
 import { Loader2 } from "lucide-react";
@@ -11,17 +12,22 @@ export default function Home() {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [filterCollapsed, setFilterCollapsed] = useState(false);
   const [detailsVisible, setDetailsVisible] = useState(false);
+  const [timelineMode, setTimelineMode] = useState(true); // Timeline enabled by default
+  const [isTimelinePlaying, setIsTimelinePlaying] = useState(false);
+  const [visibleEventIds, setVisibleEventIds] = useState<number[]>([]);
   
   // Filter states
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>([]);
   const [selectedTimePeriod, setSelectedTimePeriod] = useState<TimePeriod>("all");
+  const [selectedBoroughs, setSelectedBoroughs] = useState<string[]>([]);
 
   // Fetch filtered events
   const { data: events, isLoading } = trpc.events.list.useQuery({
     categories: selectedCategories.length > 0 ? selectedCategories : undefined,
     subcategories: selectedSubcategories.length > 0 ? selectedSubcategories : undefined,
     timePeriod: selectedTimePeriod,
+    boroughs: selectedBoroughs.length > 0 ? selectedBoroughs : undefined,
   });
 
   const handleEventSelect = (event: Event) => {
@@ -32,6 +38,19 @@ export default function Home() {
   const handleCloseDetails = () => {
     setDetailsVisible(false);
   };
+
+  const handleTimelineProgress = useCallback((eventIds: number[], currentEvent: Event | null) => {
+    setVisibleEventIds(eventIds);
+    if (currentEvent && isTimelinePlaying) {
+      setSelectedEvent(currentEvent);
+      setDetailsVisible(true);
+    }
+  }, [isTimelinePlaying]);
+
+  // Filter events for timeline mode
+  const displayedEvents = timelineMode && isTimelinePlaying
+    ? (events || []).filter(e => visibleEventIds.includes(e.id))
+    : events || [];
 
   useEffect(() => {
     if (selectedEvent) {
@@ -83,9 +102,11 @@ export default function Home() {
             selectedCategories={selectedCategories}
             selectedSubcategories={selectedSubcategories}
             selectedTimePeriod={selectedTimePeriod}
+            selectedBoroughs={selectedBoroughs}
             onCategoryChange={setSelectedCategories}
             onSubcategoryChange={setSelectedSubcategories}
             onTimePeriodChange={setSelectedTimePeriod}
+            onBoroughChange={setSelectedBoroughs}
             isCollapsed={filterCollapsed}
             onToggleCollapse={() => setFilterCollapsed(!filterCollapsed)}
           />
@@ -101,11 +122,23 @@ export default function Home() {
               </div>
             </div>
           ) : (
-            <EventMapNew
-              events={events || []}
-              selectedEvent={selectedEvent}
-              onEventSelect={handleEventSelect}
-            />
+            <>
+              <EventMapNew
+                events={displayedEvents}
+                selectedEvent={selectedEvent}
+                onEventSelect={handleEventSelect}
+              />
+
+              {/* Timeline Overlay */}
+              {timelineMode && (
+                <Timeline
+                  events={events || []}
+                  onTimelineProgress={handleTimelineProgress}
+                  isPlaying={isTimelinePlaying}
+                  onPlayPauseToggle={() => setIsTimelinePlaying(!isTimelinePlaying)}
+                />
+              )}
+            </>
           )}
 
           {/* Stats overlay */}

@@ -6,6 +6,7 @@ import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster";
 import { Event } from "../../../drizzle/schema";
 import { getCategoryById } from "@shared/categories";
+import { soundEffects } from "@/lib/sounds";
 
 interface EventMapProps {
   events: Event[];
@@ -124,6 +125,7 @@ export default function EventMapNew({ events, selectedEvent, onEventSelect }: Ev
       const marker = L.marker([lat, lng], { icon });
 
       marker.on("click", () => {
+        soundEffects.select();
         onEventSelect(event);
         
         // Smooth pan to marker with animation
@@ -136,6 +138,7 @@ export default function EventMapNew({ events, selectedEvent, onEventSelect }: Ev
 
       // Add hover effect
       marker.on("mouseover", (e) => {
+        soundEffects.hover();
         (e.target as L.Marker).getElement()?.classList.add("hovered");
       });
 

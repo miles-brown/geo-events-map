@@ -140,6 +140,7 @@ export interface EventFilters {
   timePeriod?: "month" | "6months" | "year" | "5years" | "10years" | "all";
   startDate?: Date;
   endDate?: Date;
+  boroughs?: string[];
 }
 
 export async function getFilteredEvents(filters: EventFilters): Promise<Event[]> {
@@ -154,6 +155,11 @@ export async function getFilteredEvents(filters: EventFilters): Promise<Event[]>
   // Filter by categories
   if (filters.categories && filters.categories.length > 0) {
     conditions.push(inArray(events.category, filters.categories));
+  }
+
+  // Filter by boroughs
+  if (filters.boroughs && filters.boroughs.length > 0) {
+    conditions.push(inArray(events.borough, filters.boroughs));
   }
 
   // Filter by time period
