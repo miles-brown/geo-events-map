@@ -207,3 +207,33 @@
 - [x] Add copy-to-clipboard functionality with toast confirmation
 - [ ] Generate Open Graph meta tags for rich social media previews
 - [ ] Add QR code generation for event URLs
+
+## Event Statistics Dashboard
+- [x] Create statistics API endpoint with aggregated data
+- [x] Build dashboard page with interactive charts
+- [x] Add total events by category chart (pie/donut chart)
+- [x] Add events over time trend chart (line/area chart)
+- [x] Add top boroughs chart (bar chart)
+- [x] Add event count cards with icons
+- [x] Integrate with time period filtering
+- [ ] Add export statistics functionality
+
+## User Event Submissions
+- [ ] Add event submission form for authenticated users
+- [ ] Create pending events table in database
+- [ ] Add moderation status field (pending, approved, rejected)
+- [ ] Build admin moderation queue interface
+- [ ] Add approve/reject buttons in admin panel
+- [ ] Send notifications to users on approval/rejection
+- [ ] Add submission guidelines and validation
+- [ ] Track submission history per user
+
+## Advanced Search
+- [ ] Implement full-text search across titles, descriptions, locations
+- [ ] Add search bar in header with autocomplete
+- [ ] Create search API endpoint with fuzzy matching
+- [ ] Add autocomplete suggestions dropdown
+- [ ] Implement saved search filters
+- [ ] Add search history for users
+- [ ] Support search by date range
+- [ ] Add search result highlighting

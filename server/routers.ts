@@ -22,6 +22,45 @@ export const appRouter = router({
     }),
   }),
 
+  statistics: router({
+    getStats: publicProcedure.query(async () => {
+      const allEvents = await db.getAllEvents();
+      
+      // Events by category
+      const byCategory: Record<string, number> = {};
+      allEvents.forEach(event => {
+        byCategory[event.category] = (byCategory[event.category] || 0) + 1;
+      });
+
+      // Events by borough
+      const byBorough: Record<string, number> = {};
+      allEvents.forEach(event => {
+        if (event.borough) {
+          byBorough[event.borough] = (byBorough[event.borough] || 0) + 1;
+        }
+      });
+
+      // Events over time (by month)
+      const byMonth: Record<string, number> = {};
+      allEvents.forEach(event => {
+        const month = new Date(event.eventDate).toISOString().slice(0, 7); // YYYY-MM
+        byMonth[month] = (byMonth[month] || 0) + 1;
+      });
+
+      return {
+        total: allEvents.length,
+        byCategory: Object.entries(byCategory).map(([name, count]) => ({ name, count })),
+        byBorough: Object.entries(byBorough)
+          .map(([name, count]) => ({ name, count }))
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 10),
+        byMonth: Object.entries(byMonth)
+          .map(([month, count]) => ({ month, count }))
+          .sort((a, b) => a.month.localeCompare(b.month)),
+      };
+    }),
+  }),
+
   events: router({
     // Get all events with optional filtering
     list: publicProcedure

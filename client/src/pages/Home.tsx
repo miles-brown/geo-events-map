@@ -118,6 +118,12 @@ export default function Home() {
             </Button>
             
             <a
+              href="/statistics"
+              className="text-sm text-blue-400 hover:text-blue-300 transition-colors tracking-wider mr-4"
+            >
+              STATISTICS
+            </a>
+            <a
               href="/admin"
               className="text-sm text-blue-400 hover:text-blue-300 transition-colors tracking-wider"
             >
