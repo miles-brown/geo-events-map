@@ -334,3 +334,9 @@
 - [x] Fix event details panel positioning to fit within viewport
 - [x] Ensure panel doesn't extend beyond visible screen area
 - [x] Adjust panel top position to account for header height
+
+## Critical Bug - Event Details Panel
+- [x] Fix event details panel extending beyond viewport on desktop
+- [x] Ensure panel starts below header and fits within screen
+- [x] Verify scrolling works properly within panel
+- [x] Test on both desktop and mobile screen sizes
