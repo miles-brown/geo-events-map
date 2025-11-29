@@ -61,3 +61,10 @@
 - [x] Set minimum swipe distance threshold (e.g., 50px)
 - [x] Add swipe velocity detection for quick flicks
 - [ ] Test gestures on iOS Safari and Android Chrome
+
+## Supabase Database Migration
+- [x] Update Drizzle config to use PostgreSQL dialect
+- [x] Update DATABASE_URL secret with Supabase connection string
+- [x] Push database schema to Supabase (tables already exist)
+- [x] Verify database connection
+- [x] Test application with Supabase database
