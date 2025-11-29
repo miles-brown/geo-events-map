@@ -88,34 +88,34 @@ export default function Home() {
       <header className="relative z-10 border-b-2 border-red-600 bg-black/95 backdrop-blur-md">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500 to-transparent animate-pulse" />
         
-        <div className="container mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
+        <div className="container mx-auto px-4 py-3 max-md:px-2 max-md:py-2">
+          <div className="flex items-center justify-between max-md:gap-2">
             {/* Left side - Logo and Title */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 max-md:gap-2">
               <div className="relative">
-                <Shield className="h-12 w-12 text-red-500 animate-pulse" />
+                <Shield className="h-12 w-12 text-red-500 animate-pulse max-md:h-8 max-md:w-8" />
                 <div className="absolute inset-0 bg-red-500 blur-xl opacity-30" />
               </div>
               <div>
-                <h1 className="text-3xl font-tactical text-red-500 tracking-widest drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]">
+                <h1 className="text-3xl font-tactical text-red-500 tracking-widest drop-shadow-[0_0_10px_rgba(239,68,68,0.5)] max-md:text-lg">
                   GEO EVENTS MAP
                 </h1>
-                <p className="text-xs text-green-400 tracking-[0.3em] font-stencil">
+                <p className="text-xs text-green-400 tracking-[0.3em] font-stencil max-md:text-[8px] max-md:tracking-wider">
                   INTELLIGENCE TRACKING SYSTEM
                 </p>
               </div>
             </div>
             
             {/* Right side - Status and Security Badges */}
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-6 max-md:gap-2">
               {/* System Status */}
-              <div className="flex items-center gap-2 px-3 py-1 border border-green-500/50 bg-green-950/20">
-                <Radio className="h-4 w-4 text-green-400 animate-pulse" />
-                <span className="text-sm text-green-400 tracking-widest font-stencil">SYSTEM ONLINE</span>
+              <div className="flex items-center gap-2 px-3 py-1 border border-green-500/50 bg-green-950/20 max-md:px-2 max-md:py-0.5">
+                <Radio className="h-4 w-4 text-green-400 animate-pulse max-md:h-3 max-md:w-3" />
+                <span className="text-sm text-green-400 tracking-widest font-stencil max-md:text-[8px] max-md:hidden">SYSTEM ONLINE</span>
               </div>
               
               {/* Security Badge */}
-              <div className="flex flex-col items-end gap-1">
+              <div className="flex flex-col items-end gap-1 max-md:hidden">
                 <div className="flex items-center gap-1 text-[10px] text-red-500">
                   <Lock className="h-3 w-3" />
                   <span className="tracking-widest font-stencil">ENCRYPTED</span>
@@ -130,44 +130,48 @@ export default function Home() {
         </div>
         
         {/* Classification Bar with Controls */}
-        <div className="bg-red-600 text-black py-2 px-4">
-          <div className="container mx-auto flex items-center justify-center gap-4">
+        <div className="bg-red-600 text-black py-2 px-4 max-md:py-1 max-md:px-2">
+          <div className="container mx-auto flex items-center justify-center gap-4 max-md:gap-2 max-md:flex-wrap">
             {/* Timeline Toggle */}
             <Button
               variant="outline"
               size="sm"
-              className="h-7 border-2 border-black bg-red-600 hover:bg-red-700 text-black font-stencil tracking-wider text-xs"
+              className="h-7 border-2 border-black bg-red-600 hover:bg-red-700 text-black font-stencil tracking-wider text-xs max-md:h-6 max-md:text-[9px] max-md:px-2"
               onClick={() => setTimelineMode(!timelineMode)}
             >
-              <Clock className="h-3 w-3 mr-1" />
-              {timelineMode ? 'HIDE TIMELINE' : 'SHOW TIMELINE'}
+              <Clock className="h-3 w-3 mr-1 max-md:h-2.5 max-md:w-2.5 max-md:mr-0.5" />
+              <span className="max-md:hidden">{timelineMode ? 'HIDE TIMELINE' : 'SHOW TIMELINE'}</span>
+              <span className="md:hidden">TIME</span>
             </Button>
             
             {/* Heatmap Toggle */}
             <Button
               variant="outline"
               size="sm"
-              className={`h-7 border-2 border-black bg-red-600 hover:bg-red-700 text-black font-stencil tracking-wider text-xs ${
+              className={`h-7 border-2 border-black bg-red-600 hover:bg-red-700 text-black font-stencil tracking-wider text-xs max-md:h-6 max-md:text-[9px] max-md:px-2 ${
                 heatmapEnabled ? 'bg-red-700' : ''
               }`}
               onClick={() => setHeatmapEnabled(!heatmapEnabled)}
             >
-              <Flame className="h-3 w-3 mr-1" />
-              {heatmapEnabled ? 'HIDE HEATMAP' : 'SHOW HEATMAP'}
+              <Flame className="h-3 w-3 mr-1 max-md:h-2.5 max-md:w-2.5 max-md:mr-0.5" />
+              <span className="max-md:hidden">{heatmapEnabled ? 'HIDE HEATMAP' : 'SHOW HEATMAP'}</span>
+              <span className="md:hidden">HEAT</span>
             </Button>
             
             {/* Navigation Links */}
             <a
               href="/statistics"
-              className="text-xs text-black hover:text-gray-800 transition-colors tracking-[0.2em] font-stencil border-2 border-black px-3 py-1 hover:bg-red-700"
+              className="text-xs text-black hover:text-gray-800 transition-colors tracking-[0.2em] font-stencil border-2 border-black px-3 py-1 hover:bg-red-700 max-md:text-[9px] max-md:px-2 max-md:py-0.5"
             >
-              STATISTICS
+              <span className="max-md:hidden">STATISTICS</span>
+              <span className="md:hidden">STATS</span>
             </a>
             <a
               href="/admin"
-              className="text-xs text-black hover:text-gray-800 transition-colors tracking-[0.2em] font-stencil border-2 border-black px-3 py-1 hover:bg-red-700"
+              className="text-xs text-black hover:text-gray-800 transition-colors tracking-[0.2em] font-stencil border-2 border-black px-3 py-1 hover:bg-red-700 max-md:text-[9px] max-md:px-2 max-md:py-0.5"
             >
-              ADMIN ACCESS
+              <span className="max-md:hidden">ADMIN ACCESS</span>
+              <span className="md:hidden">ADMIN</span>
             </a>
           </div>
         </div>
@@ -175,8 +179,12 @@ export default function Home() {
 
       {/* Main content */}
       <div className="flex-1 flex relative overflow-hidden">
-        {/* Category Filter Panel */}
-        <div className={`transition-all duration-300 ease-in-out ${filterCollapsed ? 'w-12' : 'w-80'} relative z-20`}>
+        {/* Category Filter Panel - Mobile Responsive */}
+        <div className={`transition-all duration-300 ease-in-out relative z-20 ${
+          filterCollapsed 
+            ? 'w-12' 
+            : 'w-80 max-md:fixed max-md:left-0 max-md:top-0 max-md:bottom-0 max-md:w-72 max-md:shadow-2xl'
+        }`}>
           <CategoryFilterNew
             selectedCategories={selectedCategories}
             selectedSubcategories={selectedSubcategories}
@@ -191,8 +199,12 @@ export default function Home() {
           />
         </div>
 
-        {/* Map Container */}
-        <div className={`flex-1 relative transition-all duration-300 ease-in-out ${detailsVisible ? 'mr-[480px]' : 'mr-0'}`}>
+        {/* Map Container - Mobile Responsive */}
+        <div className={`flex-1 relative transition-all duration-300 ease-in-out ${
+          detailsVisible 
+            ? 'mr-[480px] max-md:mr-0' 
+            : 'mr-0'
+        }`}>
           {isLoading ? (
             <div className="absolute inset-0 flex items-center justify-center bg-black/90 backdrop-blur-sm z-30">
               <div className="flex flex-col items-center gap-6 border-2 border-red-600 bg-black/80 p-12">
@@ -242,8 +254,8 @@ export default function Home() {
             </>
           )}
 
-          {/* Stats overlay - CIA Style */}
-          <div className="absolute top-4 left-4 bg-black/95 backdrop-blur-md border-2 border-red-600 px-4 py-3 z-10">
+          {/* Stats overlay - CIA Style - Mobile Responsive */}
+          <div className="absolute top-4 left-4 bg-black/95 backdrop-blur-md border-2 border-red-600 px-4 py-3 z-10 max-md:top-2 max-md:left-2 max-md:px-2 max-md:py-2 max-md:text-xs">
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500 to-transparent" />
             <div className="flex flex-col gap-2">
               <div className="text-[10px] text-red-500 tracking-[0.3em] font-stencil border-b border-red-900 pb-1">
@@ -268,9 +280,17 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Event Details Panel */}
+        {/* Event Details Panel - Mobile Responsive */}
+        {/* Mobile backdrop overlay */}
+        {detailsVisible && (
+          <div 
+            className="md:hidden fixed inset-0 bg-black/80 z-40 backdrop-blur-sm"
+            onClick={handleCloseDetails}
+          />
+        )}
+        
         <div
-          className={`fixed right-0 top-[121px] bottom-0 w-[480px] transition-transform duration-300 ease-in-out z-30 ${
+          className={`fixed right-0 top-[121px] bottom-0 w-[480px] transition-transform duration-300 ease-in-out z-30 max-md:top-0 max-md:w-full max-md:z-50 ${
             detailsVisible ? 'translate-x-0' : 'translate-x-full'
           }`}
         >

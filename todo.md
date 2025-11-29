@@ -315,3 +315,17 @@
 - [x] Add usage examples and screenshots
 - [x] Include contribution guidelines
 - [x] Add license information
+
+## Mobile Responsiveness
+- [x] Implement collapsible filter sidebar with toggle button
+- [x] Create collapsible event details panel with toggle button
+- [x] Add hamburger menu for mobile navigation
+- [x] Optimize header layout for mobile screens
+- [x] Make timeline controls touch-friendly
+- [x] Adjust classification bar for mobile
+- [ ] Implement swipe gestures for panel controls
+- [x] Add viewport meta tag for proper mobile scaling
+- [x] Test on iPhone Safari and Android Chrome
+- [x] Ensure all buttons are minimum 44x44px touch targets
+- [x] Optimize font sizes for mobile readability
+- [ ] Add compact mode for statistics dashboard

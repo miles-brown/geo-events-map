@@ -42,10 +42,10 @@ export default function EventDetails({ event, onClose }: EventDetailsProps) {
   const embedUrl = event.videoUrl ? getVideoEmbedUrl(event.videoUrl) : null;
 
   return (
-    <div className="bg-slate-950/95 backdrop-blur-md border-l border-blue-500/30 h-full w-full flex flex-col shadow-2xl">
+    <div className="bg-black/95 backdrop-blur-md border-l-2 border-red-600 h-full w-full flex flex-col shadow-2xl max-md:fixed max-md:inset-0 max-md:z-50 max-md:border-l-0">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-blue-500/30 bg-slate-900/50 flex-shrink-0">
-        <h2 className="font-bold text-lg tracking-wider text-blue-400 uppercase">Event Details</h2>
+      <div className="flex items-center justify-between p-4 border-b-2 border-red-600 bg-black/80 flex-shrink-0 max-md:p-3">
+        <h2 className="font-bold text-lg tracking-wider text-red-500 uppercase font-stencil max-md:text-base">INCIDENT DETAILS</h2>
         <div className="flex gap-2">
           <Button 
             variant="ghost" 
@@ -54,25 +54,25 @@ export default function EventDetails({ event, onClose }: EventDetailsProps) {
               const url = `${window.location.origin}/event/${event.id}`;
               navigator.clipboard.writeText(url);
             }}
-            className="hover:bg-blue-500/20 hover:text-blue-300 transition-colors"
+            className="hover:bg-red-500/20 hover:text-red-300 transition-colors max-md:h-8 max-md:w-8"
             title="Copy share link"
           >
-            <Share2 className="h-5 w-5 text-slate-400" />
+            <Share2 className="h-5 w-5 text-green-400 max-md:h-4 max-md:w-4" />
           </Button>
           <Button 
             variant="ghost" 
             size="icon" 
             onClick={onClose}
-            className="hover:bg-blue-500/20 hover:text-blue-300 transition-colors"
+            className="hover:bg-red-500/20 hover:text-red-300 transition-colors max-md:h-8 max-md:w-8"
           >
-            <X className="h-5 w-5 text-slate-400" />
+            <X className="h-5 w-5 text-green-400 max-md:h-4 max-md:w-4" />
           </Button>
         </div>
       </div>
 
       {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto">
-        <div className="p-6 space-y-6">
+        <div className="p-6 space-y-6 max-md:p-4 max-md:space-y-4">
           {/* Video Player */}
           {embedUrl && (
             <div className="aspect-video bg-slate-900 rounded-lg overflow-hidden border border-blue-500/30 shadow-lg">
