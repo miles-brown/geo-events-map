@@ -34,16 +34,19 @@ export const events = mysqlTable("events", {
   // Event details
   title: varchar("title", { length: 255 }).notNull(),
   description: text("description").notNull(),
-  category: varchar("category", { length: 100 }).notNull(), // e.g., "crime", "paranormal", "accident", "protest", etc.
+  category: varchar("category", { length: 100 }).notNull(), // Primary category e.g., "crime", "transport", "fire"
+  subcategories: text("subcategories"), // JSON array of subcategory IDs e.g., ["fights", "brawls"]
+  tags: text("tags"), // JSON array of additional tags for flexible categorization
   eventDate: timestamp("eventDate").notNull(), // When the event occurred
   
   // Location data
   latitude: varchar("latitude", { length: 50 }).notNull(), // Store as string to avoid precision issues
   longitude: varchar("longitude", { length: 50 }).notNull(),
   locationName: varchar("locationName", { length: 255 }).notNull(), // e.g., "Camden Town, London"
+  borough: varchar("borough", { length: 100 }), // London Borough e.g., "Camden", "Westminster"
   
   // Media
-  videoUrl: text("videoUrl").notNull(), // URL to the video source
+  videoUrl: text("videoUrl"), // URL to the video source (optional)
   thumbnailUrl: text("thumbnailUrl"), // Optional thumbnail image
   
   // Additional context
