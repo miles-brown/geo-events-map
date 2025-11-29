@@ -295,3 +295,13 @@
 - [x] Update font-tactical class with condensed alternative (Barlow Condensed)
 - [x] Update font-mono-tech class with efficient monospace font (IBM Plex Mono)
 - [x] Test readability across all interface elements
+
+## Timeline Feature Implementation
+- [x] Fix timeline toggle to properly show/hide timeline controls
+- [x] Implement chronological event animation (year by year or month by month)
+- [x] Add timeline playback controls (play/pause, speed control)
+- [x] Display current date/period during timeline playback
+- [x] Filter map markers to show only events up to current timeline position
+- [x] Add timeline scrubber for manual navigation
+- [x] Implement auto-play functionality
+- [x] Add visual timeline bar showing event distribution over time

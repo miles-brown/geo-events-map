@@ -17,7 +17,7 @@ export default function Home() {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [filterCollapsed, setFilterCollapsed] = useState(false);
   const [detailsVisible, setDetailsVisible] = useState(false);
-  const [timelineMode, setTimelineMode] = useState(true);
+  const [timelineMode, setTimelineMode] = useState(false);
   const [isTimelinePlaying, setIsTimelinePlaying] = useState(false);
   const [visibleEventIds, setVisibleEventIds] = useState<number[]>([]);
   const [heatmapEnabled, setHeatmapEnabled] = useState(false);
