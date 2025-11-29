@@ -277,3 +277,11 @@
 - [x] Transform all buttons with military command styling
 - [x] Add security classification headers to all major sections
 - [x] Implement film grain and vignette effects site-wide
+
+## Header Layout Reorganization
+- [x] Move timeline button from main header to classification bar
+- [x] Move heatmap button from main header to classification bar
+- [x] Move statistics link from main header to classification bar
+- [x] Move admin access link from main header to classification bar
+- [x] Remove "CLASSIFIED // TOP SECRET // NOFORN // EYES ONLY" text from classification bar
+- [x] Style controls to fit within classification bar aesthetics

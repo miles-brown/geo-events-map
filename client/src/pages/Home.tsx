@@ -106,7 +106,7 @@ export default function Home() {
               </div>
             </div>
             
-            {/* Right side - Status and Controls */}
+            {/* Right side - Status and Security Badges */}
             <div className="flex items-center gap-6">
               {/* System Status */}
               <div className="flex items-center gap-2 px-3 py-1 border border-green-500/50 bg-green-950/20">
@@ -125,53 +125,51 @@ export default function Home() {
                   <span className="tracking-widest font-stencil">MONITORED</span>
                 </div>
               </div>
-              
-              {/* Timeline Toggle */}
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-8 border-cyan-500 bg-black hover:bg-cyan-950 hover:border-cyan-400 text-cyan-400 font-stencil tracking-wider"
-                onClick={() => setTimelineMode(!timelineMode)}
-              >
-                <Clock className="h-4 w-4 mr-2" />
-                {timelineMode ? 'HIDE TIMELINE' : 'SHOW TIMELINE'}
-              </Button>
-              
-              {/* Heatmap Toggle */}
-              <Button
-                variant="outline"
-                size="sm"
-                className={`h-8 border-orange-500 bg-black hover:bg-orange-950 hover:border-orange-400 text-orange-400 font-stencil tracking-wider ${
-                  heatmapEnabled ? 'bg-orange-950/50 border-orange-400' : ''
-                }`}
-                onClick={() => setHeatmapEnabled(!heatmapEnabled)}
-              >
-                <Flame className="h-4 w-4 mr-2" />
-                {heatmapEnabled ? 'HIDE HEATMAP' : 'SHOW HEATMAP'}
-              </Button>
-              
-              {/* Navigation Links */}
-              <a
-                href="/statistics"
-                className="text-sm text-red-500 hover:text-red-400 transition-colors tracking-[0.2em] font-stencil border border-red-600 px-3 py-1 hover:bg-red-950/30"
-              >
-                STATISTICS
-              </a>
-              <a
-                href="/admin"
-                className="text-sm text-red-500 hover:text-red-400 transition-colors tracking-[0.2em] font-stencil border border-red-600 px-3 py-1 hover:bg-red-950/30"
-              >
-                ADMIN ACCESS
-              </a>
             </div>
           </div>
         </div>
         
-        {/* Classification Bar */}
-        <div className="bg-red-600 text-black text-center py-1">
-          <span className="text-xs font-black tracking-[0.3em] font-stencil">
-            CLASSIFIED // TOP SECRET // NOFORN // EYES ONLY
-          </span>
+        {/* Classification Bar with Controls */}
+        <div className="bg-red-600 text-black py-2 px-4">
+          <div className="container mx-auto flex items-center justify-center gap-4">
+            {/* Timeline Toggle */}
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-7 border-2 border-black bg-red-600 hover:bg-red-700 text-black font-stencil tracking-wider text-xs"
+              onClick={() => setTimelineMode(!timelineMode)}
+            >
+              <Clock className="h-3 w-3 mr-1" />
+              {timelineMode ? 'HIDE TIMELINE' : 'SHOW TIMELINE'}
+            </Button>
+            
+            {/* Heatmap Toggle */}
+            <Button
+              variant="outline"
+              size="sm"
+              className={`h-7 border-2 border-black bg-red-600 hover:bg-red-700 text-black font-stencil tracking-wider text-xs ${
+                heatmapEnabled ? 'bg-red-700' : ''
+              }`}
+              onClick={() => setHeatmapEnabled(!heatmapEnabled)}
+            >
+              <Flame className="h-3 w-3 mr-1" />
+              {heatmapEnabled ? 'HIDE HEATMAP' : 'SHOW HEATMAP'}
+            </Button>
+            
+            {/* Navigation Links */}
+            <a
+              href="/statistics"
+              className="text-xs text-black hover:text-gray-800 transition-colors tracking-[0.2em] font-stencil border-2 border-black px-3 py-1 hover:bg-red-700"
+            >
+              STATISTICS
+            </a>
+            <a
+              href="/admin"
+              className="text-xs text-black hover:text-gray-800 transition-colors tracking-[0.2em] font-stencil border-2 border-black px-3 py-1 hover:bg-red-700"
+            >
+              ADMIN ACCESS
+            </a>
+          </div>
         </div>
       </header>
 
