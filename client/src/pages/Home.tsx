@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Shield, Menu, X, Clock, Flame, BarChart3, Lock } from "lucide-react";
 import { Event } from "../../../drizzle/schema";
 import type { TimePeriod } from "@shared/categories";
+import { useSwipe } from "@/hooks/useSwipe";
 
 export default function Home() {
   // State management
@@ -47,6 +48,40 @@ export default function Home() {
     setDetailsPanelOpen(false);
     setTimeout(() => setSelectedEvent(null), 300);
   };
+
+  // Swipe gesture handlers
+  const mainSwipeRef = useSwipe<HTMLDivElement>({
+    onSwipeLeft: () => {
+      // Only open filter sidebar on mobile when swiping left from edge
+      if (window.innerWidth < 768 && !filterSidebarOpen) {
+        setFilterSidebarOpen(true);
+      }
+    },
+  });
+
+  const filterSwipeRef = useSwipe<HTMLDivElement>({
+    onSwipeRight: () => {
+      // Close filter sidebar when swiping right
+      if (filterSidebarOpen) {
+        setFilterSidebarOpen(false);
+      }
+    },
+  });
+
+  const detailsSwipeRef = useSwipe<HTMLDivElement>({
+    onSwipeRight: () => {
+      // Close details panel when swiping right
+      if (detailsPanelOpen) {
+        handleCloseDetails();
+      }
+    },
+    onSwipeUp: () => {
+      // Also allow swipe up to close details on mobile
+      if (window.innerWidth < 768 && detailsPanelOpen) {
+        handleCloseDetails();
+      }
+    },
+  });
 
   const handleTimelineProgress = useCallback((eventIds: number[], currentEvent: Event | null) => {
     setVisibleEventIds(eventIds);
@@ -174,9 +209,10 @@ export default function Home() {
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 flex overflow-hidden relative">
+      <main ref={mainSwipeRef} className="flex-1 flex overflow-hidden relative">
         {/* Filter Sidebar - Mobile: Overlay, Desktop: Fixed */}
         <aside
+          ref={filterSwipeRef}
           className={`
             fixed md:relative
             inset-y-0 left-0
@@ -289,6 +325,7 @@ export default function Home() {
             
             {/* Details Panel */}
             <aside
+              ref={detailsSwipeRef}
               className={`
                 fixed
                 inset-0 md:inset-y-0 md:right-0 md:left-auto

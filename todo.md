@@ -50,3 +50,14 @@
 - [ ] Verify z-index layering works correctly
 - [ ] Ensure no viewport overflow issues
 - [ ] Test all interactive elements
+
+## Mobile Swipe Gestures
+- [x] Create custom useSwipe hook for touch gesture detection
+- [x] Implement swipe-left gesture to open filter sidebar
+- [x] Implement swipe-right gesture to close filter sidebar
+- [x] Implement swipe-right gesture to close event details panel
+- [x] Implement swipe-up gesture on event details for smooth dismissal
+- [ ] Add visual feedback during swipe (panel follows finger)
+- [x] Set minimum swipe distance threshold (e.g., 50px)
+- [x] Add swipe velocity detection for quick flicks
+- [ ] Test gestures on iOS Safari and Android Chrome
