@@ -340,3 +340,9 @@
 - [x] Ensure panel starts below header and fits within screen
 - [x] Verify scrolling works properly within panel
 - [x] Test on both desktop and mobile screen sizes
+
+## Z-Index Layering Issue
+- [x] Fix map container overlapping event details panel
+- [x] Ensure details panel appears on top of map
+- [x] Verify filter sidebar z-index is also correct
+- [x] Test layering on both desktop and mobile

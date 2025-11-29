@@ -290,7 +290,7 @@ export default function Home() {
         )}
         
         <div
-          className={`fixed right-0 top-[121px] bottom-0 w-[480px] transition-transform duration-300 ease-in-out z-30 max-md:top-0 max-md:w-full max-md:z-50 ${
+          className={`fixed right-0 top-[121px] bottom-0 w-[480px] transition-transform duration-300 ease-in-out z-[100] max-md:top-0 max-md:w-full max-md:z-50 ${
             detailsVisible ? 'translate-x-0' : 'translate-x-full'
           }`}
         >
