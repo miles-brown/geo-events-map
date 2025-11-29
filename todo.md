@@ -329,3 +329,8 @@
 - [x] Ensure all buttons are minimum 44x44px touch targets
 - [x] Optimize font sizes for mobile readability
 - [ ] Add compact mode for statistics dashboard
+
+## Bug Fixes
+- [x] Fix event details panel positioning to fit within viewport
+- [x] Ensure panel doesn't extend beyond visible screen area
+- [x] Adjust panel top position to account for header height
