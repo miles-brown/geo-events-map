@@ -8,7 +8,7 @@ import CIAEffects from "@/components/CIAEffects";
 import Heatmap from "@/components/Heatmap";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { Clock, Flame } from "lucide-react";
+import { Clock, Flame, Shield, Lock, Eye, AlertTriangle, Radio } from "lucide-react";
 import { Event } from "../../../drizzle/schema";
 import type { TimePeriod } from "@shared/categories";
 import { Loader2 } from "lucide-react";
@@ -17,7 +17,7 @@ export default function Home() {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [filterCollapsed, setFilterCollapsed] = useState(false);
   const [detailsVisible, setDetailsVisible] = useState(false);
-  const [timelineMode, setTimelineMode] = useState(true); // Timeline enabled by default
+  const [timelineMode, setTimelineMode] = useState(true);
   const [isTimelinePlaying, setIsTimelinePlaying] = useState(false);
   const [visibleEventIds, setVisibleEventIds] = useState<number[]>([]);
   const [heatmapEnabled, setHeatmapEnabled] = useState(false);
@@ -67,69 +67,111 @@ export default function Home() {
   }, [selectedEvent]);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col relative overflow-hidden">
+    <div className="min-h-screen bg-black text-green-400 flex flex-col relative overflow-hidden font-mono-tech">
       {/* CIA Visual Effects */}
       <CIAEffects />
-      {/* Animated background grid */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-950/20 via-slate-950 to-cyan-950/20 pointer-events-none" />
       
-      {/* Header */}
-      <header className="relative z-10 border-b border-blue-500/30 bg-slate-950/80 backdrop-blur-md">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
-              <span className="text-2xl">🗺️</span>
+      {/* Tactical background grid */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-radial from-red-950/10 via-black to-black pointer-events-none" />
+      
+      {/* Scan line effect */}
+      <div className="absolute inset-0 bg-scan-lines opacity-10 pointer-events-none animate-scan" />
+      
+      {/* Corner HUD brackets */}
+      <div className="absolute top-0 left-0 w-24 h-24 border-t-2 border-l-2 border-red-500/50 z-50 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-24 h-24 border-t-2 border-r-2 border-red-500/50 z-50 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-24 h-24 border-b-2 border-l-2 border-red-500/50 z-50 pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-24 h-24 border-b-2 border-r-2 border-red-500/50 z-50 pointer-events-none" />
+      
+      {/* Header - CIA Style */}
+      <header className="relative z-10 border-b-2 border-red-600 bg-black/95 backdrop-blur-md">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500 to-transparent animate-pulse" />
+        
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            {/* Left side - Logo and Title */}
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <Shield className="h-12 w-12 text-red-500 animate-pulse" />
+                <div className="absolute inset-0 bg-red-500 blur-xl opacity-30" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-tactical text-red-500 tracking-widest drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]">
+                  GEO EVENTS MAP
+                </h1>
+                <p className="text-xs text-green-400 tracking-[0.3em] font-stencil">
+                  INTELLIGENCE TRACKING SYSTEM
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                GEO EVENTS MAP
-              </h1>
-              <p className="text-xs text-slate-400 tracking-wider">INTELLIGENCE TRACKING SYSTEM</p>
+            
+            {/* Right side - Status and Controls */}
+            <div className="flex items-center gap-6">
+              {/* System Status */}
+              <div className="flex items-center gap-2 px-3 py-1 border border-green-500/50 bg-green-950/20">
+                <Radio className="h-4 w-4 text-green-400 animate-pulse" />
+                <span className="text-sm text-green-400 tracking-widest font-stencil">SYSTEM ONLINE</span>
+              </div>
+              
+              {/* Security Badge */}
+              <div className="flex flex-col items-end gap-1">
+                <div className="flex items-center gap-1 text-[10px] text-red-500">
+                  <Lock className="h-3 w-3" />
+                  <span className="tracking-widest font-stencil">ENCRYPTED</span>
+                </div>
+                <div className="flex items-center gap-1 text-[10px] text-yellow-500">
+                  <Eye className="h-3 w-3" />
+                  <span className="tracking-widest font-stencil">MONITORED</span>
+                </div>
+              </div>
+              
+              {/* Timeline Toggle */}
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 border-cyan-500 bg-black hover:bg-cyan-950 hover:border-cyan-400 text-cyan-400 font-stencil tracking-wider"
+                onClick={() => setTimelineMode(!timelineMode)}
+              >
+                <Clock className="h-4 w-4 mr-2" />
+                {timelineMode ? 'HIDE TIMELINE' : 'SHOW TIMELINE'}
+              </Button>
+              
+              {/* Heatmap Toggle */}
+              <Button
+                variant="outline"
+                size="sm"
+                className={`h-8 border-orange-500 bg-black hover:bg-orange-950 hover:border-orange-400 text-orange-400 font-stencil tracking-wider ${
+                  heatmapEnabled ? 'bg-orange-950/50 border-orange-400' : ''
+                }`}
+                onClick={() => setHeatmapEnabled(!heatmapEnabled)}
+              >
+                <Flame className="h-4 w-4 mr-2" />
+                {heatmapEnabled ? 'HIDE HEATMAP' : 'SHOW HEATMAP'}
+              </Button>
+              
+              {/* Navigation Links */}
+              <a
+                href="/statistics"
+                className="text-sm text-red-500 hover:text-red-400 transition-colors tracking-[0.2em] font-stencil border border-red-600 px-3 py-1 hover:bg-red-950/30"
+              >
+                STATISTICS
+              </a>
+              <a
+                href="/admin"
+                className="text-sm text-red-500 hover:text-red-400 transition-colors tracking-[0.2em] font-stencil border border-red-600 px-3 py-1 hover:bg-red-950/30"
+              >
+                ADMIN ACCESS
+              </a>
             </div>
           </div>
-          
-          <div className="flex items-center gap-4">
-            <span className="status-indicator"></span>
-            <span className="text-sm text-green-400 tracking-wider">SYSTEM ONLINE</span>
-            
-            {/* Timeline Toggle */}
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-8 border-blue-500/30 hover:bg-blue-500/10 hover:border-blue-500/50"
-              onClick={() => setTimelineMode(!timelineMode)}
-            >
-              <Clock className="h-4 w-4 mr-2" />
-              {timelineMode ? 'Hide Timeline' : 'Show Timeline'}
-            </Button>
-            
-            {/* Heatmap Toggle */}
-            <Button
-              variant="outline"
-              size="sm"
-              className={`h-8 border-orange-500/30 hover:bg-orange-500/10 hover:border-orange-500/50 ${
-                heatmapEnabled ? 'bg-orange-500/20 border-orange-500/50' : ''
-              }`}
-              onClick={() => setHeatmapEnabled(!heatmapEnabled)}
-            >
-              <Flame className="h-4 w-4 mr-2" />
-              {heatmapEnabled ? 'Hide Heatmap' : 'Show Heatmap'}
-            </Button>
-            
-            <a
-              href="/statistics"
-              className="text-sm text-blue-400 hover:text-blue-300 transition-colors tracking-wider mr-4"
-            >
-              STATISTICS
-            </a>
-            <a
-              href="/admin"
-              className="text-sm text-blue-400 hover:text-blue-300 transition-colors tracking-wider"
-            >
-              ADMIN ACCESS
-            </a>
-          </div>
+        </div>
+        
+        {/* Classification Bar */}
+        <div className="bg-red-600 text-black text-center py-1">
+          <span className="text-xs font-black tracking-[0.3em] font-stencil">
+            CLASSIFIED // TOP SECRET // NOFORN // EYES ONLY
+          </span>
         </div>
       </header>
 
@@ -154,10 +196,23 @@ export default function Home() {
         {/* Map Container */}
         <div className={`flex-1 relative transition-all duration-300 ease-in-out ${detailsVisible ? 'mr-[480px]' : 'mr-0'}`}>
           {isLoading ? (
-            <div className="absolute inset-0 flex items-center justify-center bg-slate-950/50 backdrop-blur-sm z-30">
-              <div className="flex flex-col items-center gap-4">
-                <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
-                <p className="text-sm text-slate-400 tracking-wider">LOADING INTELLIGENCE DATA...</p>
+            <div className="absolute inset-0 flex items-center justify-center bg-black/90 backdrop-blur-sm z-30">
+              <div className="flex flex-col items-center gap-6 border-2 border-red-600 bg-black/80 p-12">
+                <AlertTriangle className="h-16 w-16 text-red-500 animate-pulse" />
+                <div className="flex items-center gap-4">
+                  <Loader2 className="h-8 w-8 animate-spin text-green-400" />
+                  <p className="text-lg text-green-400 tracking-[0.3em] font-stencil">
+                    [ ACCESSING CLASSIFIED DATABASE ]
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <div className="w-2 h-2 bg-red-500 rounded-full animate-ping" />
+                  <div className="w-2 h-2 bg-yellow-500 rounded-full animate-ping delay-100" />
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-ping delay-200" />
+                </div>
+                <p className="text-xs text-gray-600 tracking-widest font-mono">
+                  SECURITY CLEARANCE: LEVEL 5 // DECRYPTING...
+                </p>
               </div>
             </div>
           ) : (
@@ -189,26 +244,35 @@ export default function Home() {
             </>
           )}
 
-          {/* Stats overlay */}
-          <div className="absolute top-4 left-4 bg-slate-950/80 backdrop-blur-md border border-blue-500/30 rounded-lg px-4 py-2 z-10">
-            <div className="flex items-center gap-4 text-sm">
-              <div>
-                <span className="text-slate-400">EVENTS:</span>
-                <span className="ml-2 text-blue-400 font-mono font-bold">{events?.length || 0}</span>
+          {/* Stats overlay - CIA Style */}
+          <div className="absolute top-4 left-4 bg-black/95 backdrop-blur-md border-2 border-red-600 px-4 py-3 z-10">
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500 to-transparent" />
+            <div className="flex flex-col gap-2">
+              <div className="text-[10px] text-red-500 tracking-[0.3em] font-stencil border-b border-red-900 pb-1">
+                TACTICAL OVERVIEW
               </div>
-              {selectedCategories.length > 0 && (
-                <div className="border-l border-slate-700 pl-4">
-                  <span className="text-slate-400">FILTERED:</span>
-                  <span className="ml-2 text-cyan-400 font-mono font-bold">{selectedCategories.length}</span>
+              <div className="flex items-center gap-6 text-sm font-mono">
+                <div className="flex items-center gap-2">
+                  <span className="text-gray-500 tracking-wider">INCIDENTS:</span>
+                  <span className="text-red-500 font-black text-lg tracking-wider">{events?.length || 0}</span>
                 </div>
-              )}
+                {selectedCategories.length > 0 && (
+                  <div className="flex items-center gap-2 border-l border-red-900 pl-4">
+                    <span className="text-gray-500 tracking-wider">FILTERED:</span>
+                    <span className="text-yellow-500 font-black text-lg tracking-wider">{selectedCategories.length}</span>
+                  </div>
+                )}
+              </div>
+              <div className="text-[9px] text-gray-600 tracking-widest font-mono">
+                CLASSIFICATION: TS//SCI
+              </div>
             </div>
           </div>
         </div>
 
         {/* Event Details Panel */}
         <div
-          className={`fixed right-0 top-[73px] bottom-0 w-[480px] transition-transform duration-300 ease-in-out z-30 ${
+          className={`fixed right-0 top-[121px] bottom-0 w-[480px] transition-transform duration-300 ease-in-out z-30 ${
             detailsVisible ? 'translate-x-0' : 'translate-x-full'
           }`}
         >
@@ -219,10 +283,37 @@ export default function Home() {
       <style>{`
         .bg-grid-pattern {
           background-image: 
-            linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
-          background-size: 50px 50px;
-          animation: grid-scroll 20s linear infinite;
+            linear-gradient(rgba(239, 68, 68, 0.15) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(239, 68, 68, 0.15) 1px, transparent 1px);
+          background-size: 40px 40px;
+          animation: grid-scroll 30s linear infinite;
+        }
+
+        .bg-gradient-radial {
+          background: radial-gradient(circle at center, var(--tw-gradient-stops));
+        }
+
+        .bg-scan-lines {
+          background-image: repeating-linear-gradient(
+            0deg,
+            rgba(0, 0, 0, 0.1),
+            rgba(0, 0, 0, 0.1) 1px,
+            transparent 1px,
+            transparent 2px
+          );
+        }
+
+        @keyframes scan {
+          0% {
+            transform: translateY(0);
+          }
+          100% {
+            transform: translateY(100%);
+          }
+        }
+
+        .animate-scan {
+          animation: scan 10s linear infinite;
         }
 
         @keyframes grid-scroll {
@@ -230,8 +321,16 @@ export default function Home() {
             transform: translate(0, 0);
           }
           100% {
-            transform: translate(50px, 50px);
+            transform: translate(40px, 40px);
           }
+        }
+
+        .delay-100 {
+          animation-delay: 100ms;
+        }
+
+        .delay-200 {
+          animation-delay: 200ms;
         }
       `}</style>
     </div>

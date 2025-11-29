@@ -79,26 +79,29 @@ export default function CategoryFilterNew({
 
   if (isCollapsed) {
     return (
-      <div className="bg-card border-r border-border h-full w-12 flex flex-col items-center py-4">
+      <div className="bg-black border-r-2 border-red-600 h-full w-12 flex flex-col items-center py-4">
         <Button
           variant="ghost"
           size="icon"
           onClick={onToggleCollapse}
-          className="mb-4"
+          className="mb-4 text-red-500 hover:text-red-400 hover:bg-red-950"
         >
           <ChevronRight className="h-4 w-4" />
         </Button>
-        <div className="writing-mode-vertical text-sm font-medium">Filters</div>
+        <div className="writing-mode-vertical text-sm font-stencil tracking-widest text-green-400">FILTERS</div>
       </div>
     );
   }
 
   return (
-    <div className="bg-slate-950/90 backdrop-blur-md border-r border-blue-500/30 h-full w-80 flex flex-col shadow-2xl">
+    <div className="bg-black/95 backdrop-blur-md border-r-2 border-red-600 h-full w-80 flex flex-col shadow-2xl relative">
+      {/* Top classification bar */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500 to-transparent" />
+      
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-blue-500/30 bg-slate-900/50">
-        <h2 className="font-semibold text-lg tracking-wider text-blue-400">FILTERS</h2>
-        <Button variant="ghost" size="icon" onClick={onToggleCollapse}>
+      <div className="flex items-center justify-between p-4 border-b-2 border-red-900 bg-black/80">
+        <h2 className="font-tactical text-xl tracking-[0.3em] text-red-500">FILTERS</h2>
+        <Button variant="ghost" size="icon" onClick={onToggleCollapse} className="text-red-500 hover:text-red-400 hover:bg-red-950">
           <ChevronLeft className="h-4 w-4" />
         </Button>
       </div>
@@ -107,14 +110,14 @@ export default function CategoryFilterNew({
         <div className="p-4 space-y-6">
           {/* Time Period Filter */}
           <div>
-            <h3 className="font-medium text-xs mb-3 tracking-wider text-slate-400 uppercase">Time Period</h3>
+            <h3 className="font-stencil text-xs mb-3 tracking-[0.3em] text-green-400 uppercase border-b border-red-900 pb-2">TIME PERIOD</h3>
             <div className="space-y-2">
               {TIME_PERIODS.map((period) => (
                 <Button
                   key={period.id}
                   variant={selectedTimePeriod === period.id ? "default" : "outline"}
                   size="sm"
-                  className={`w-full justify-start ${selectedTimePeriod === period.id ? "bg-blue-600 hover:bg-blue-700 border-blue-500" : "border-slate-700 hover:bg-slate-800 hover:border-blue-500/50"}`}
+                  className={`w-full justify-start font-mono-tech tracking-wider ${selectedTimePeriod === period.id ? "bg-red-600 hover:bg-red-700 border-red-500 text-black font-bold" : "border-red-900 hover:bg-red-950 hover:border-red-600 text-green-400"}`}
                   onClick={() => {
                     soundEffects.select();
                     onTimePeriodChange(period.id);
@@ -132,7 +135,7 @@ export default function CategoryFilterNew({
           {/* London Borough Filter */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h3 className="font-medium text-xs tracking-wider text-slate-400 uppercase">London Boroughs</h3>
+              <h3 className="font-stencil text-xs tracking-[0.3em] text-green-400 uppercase border-b border-red-900 pb-2 flex-1">LONDON BOROUGHS</h3>
               <Button
                 variant="ghost"
                 size="icon"
@@ -156,10 +159,10 @@ export default function CategoryFilterNew({
                       key={borough}
                       variant={isSelected ? "default" : "ghost"}
                       size="sm"
-                      className={`w-full justify-start text-xs ${
+                      className={`w-full justify-start text-xs font-mono-tech ${
                         isSelected
-                          ? "bg-cyan-600 hover:bg-cyan-700 border-cyan-500"
-                          : "hover:bg-slate-800 hover:border-blue-500/30 transition-all"
+                          ? "bg-yellow-600 hover:bg-yellow-700 border-yellow-500 text-black font-bold"
+                          : "hover:bg-red-950 hover:border-red-600 transition-all text-green-400"
                       }`}
                       onClick={() => toggleBorough(borough)}
                       onMouseEnter={() => soundEffects.hover()}
@@ -177,7 +180,7 @@ export default function CategoryFilterNew({
                   <Badge
                     key={borough}
                     variant="secondary"
-                    className="text-xs bg-cyan-600/20 border-cyan-500/50 text-cyan-300"
+                    className="text-xs bg-yellow-600/20 border-yellow-500/50 text-yellow-300 font-mono"
                   >
                     {borough}
                   </Badge>
@@ -191,15 +194,15 @@ export default function CategoryFilterNew({
           {/* Category Filters */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h3 className="font-medium text-xs tracking-wider text-slate-400 uppercase">Categories</h3>
+              <h3 className="font-stencil text-xs tracking-[0.3em] text-green-400 uppercase border-b border-red-900 pb-2 flex-1">CATEGORIES</h3>
               {(selectedCategories.length > 0 || selectedSubcategories.length > 0) && (
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={clearAll}
-                  className="h-auto py-1 px-2 text-xs hover:text-blue-400 transition-colors"
+                  className="h-auto py-1 px-2 text-xs hover:text-red-400 transition-colors text-red-500 font-stencil tracking-wider"
                 >
-                  Clear All
+                  CLEAR ALL
                 </Button>
               )}
             </div>
@@ -219,12 +222,12 @@ export default function CategoryFilterNew({
                       <Button
                         variant={isSelected ? "default" : "outline"}
                         size="sm"
-                        className={`flex-1 justify-start gap-2 ${isSelected ? '' : 'hover:bg-slate-800/50 hover:border-blue-500/30 transition-all'}`}
+                        className={`flex-1 justify-start gap-2 font-mono-tech ${isSelected ? 'text-black font-bold' : 'hover:bg-red-950/50 hover:border-red-600/50 transition-all text-green-400'}`}
                         onClick={() => toggleCategory(category.id)}
                         onMouseEnter={() => soundEffects.hover()}
                         style={{
                           backgroundColor: isSelected ? category.color : undefined,
-                          borderColor: isSelected ? category.color : 'rgba(51, 65, 85, 0.5)',
+                          borderColor: isSelected ? category.color : 'rgba(127, 29, 29, 0.5)',
                         }}
                       >
                         <span>{category.icon}</span>
@@ -240,7 +243,7 @@ export default function CategoryFilterNew({
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8"
+                        className="h-8 w-8 text-green-400 hover:text-red-400 hover:bg-red-950"
                         onClick={() => toggleExpanded(category.id)}
                       >
                         {isExpanded ? (
@@ -261,7 +264,7 @@ export default function CategoryFilterNew({
                               key={subcat.id}
                               variant={isSubSelected ? "secondary" : "ghost"}
                               size="sm"
-                              className="w-full justify-start text-xs hover:bg-slate-800 transition-colors"
+                              className="w-full justify-start text-xs hover:bg-red-950 transition-colors font-mono text-green-400"
                               onClick={() => toggleSubcategory(subcat.id)}
                               onMouseEnter={() => soundEffects.hover()}
                             >
@@ -281,9 +284,9 @@ export default function CategoryFilterNew({
 
       {/* Active Filters Summary */}
       {(selectedCategories.length > 0 || selectedSubcategories.length > 0 || selectedBoroughs.length > 0) && (
-        <div className="border-t border-blue-500/30 p-4 bg-slate-900/30">
-          <div className="text-xs text-slate-400 mb-2 font-mono">
-            ACTIVE: {selectedCategories.length} categories, {selectedSubcategories.length} subcategories, {selectedBoroughs.length} boroughs
+        <div className="border-t-2 border-red-900 p-4 bg-black/80">
+          <div className="text-[10px] text-green-400 mb-2 font-stencil tracking-widest">
+            ACTIVE FILTERS: <span className="text-red-500 font-bold">{selectedCategories.length}</span> CAT / <span className="text-yellow-500 font-bold">{selectedSubcategories.length}</span> SUB / <span className="text-cyan-500 font-bold">{selectedBoroughs.length}</span> LOC
           </div>
         </div>
       )}

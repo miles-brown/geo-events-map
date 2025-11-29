@@ -30,28 +30,31 @@ export default function Admin() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="min-h-screen flex items-center justify-center bg-black">
+        <div className="flex flex-col items-center gap-4 border-2 border-red-600 bg-black/80 p-12">
+          <Loader2 className="h-12 w-12 animate-spin text-red-500" />
+          <p className="text-green-400 font-stencil tracking-[0.3em]">[ VERIFYING CLEARANCE ]</p>
+        </div>
       </div>
     );
   }
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background p-4">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>Admin Access Required</CardTitle>
-            <CardDescription>Please log in to access the admin panel</CardDescription>
+      <div className="min-h-screen flex items-center justify-center bg-black p-4">
+        <Card className="w-full max-w-md bg-black border-2 border-red-600">
+          <CardHeader className="border-b-2 border-red-900">
+            <CardTitle className="font-tactical text-2xl text-red-500 tracking-[0.2em]">ADMIN ACCESS REQUIRED</CardTitle>
+            <CardDescription className="text-green-400 font-stencil tracking-wider">Authentication credentials needed</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <Button asChild className="w-full">
-              <a href={getLoginUrl()}>Log In</a>
+          <CardContent className="space-y-4 pt-6">
+            <Button asChild className="w-full bg-red-600 hover:bg-red-700 text-black font-stencil tracking-wider border-2 border-red-700">
+              <a href={getLoginUrl()}>AUTHENTICATE</a>
             </Button>
-            <Button asChild variant="outline" className="w-full">
+            <Button asChild variant="outline" className="w-full border-2 border-green-600 text-green-400 hover:bg-green-950 font-stencil tracking-wider">
               <Link href="/">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Map
+                RETURN TO MAP
               </Link>
             </Button>
           </CardContent>
@@ -63,17 +66,20 @@ export default function Admin() {
   // Check if user is admin
   if (user?.role !== "admin") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background p-4">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>Access Denied</CardTitle>
-            <CardDescription>You do not have permission to access the admin panel</CardDescription>
+      <div className="min-h-screen flex items-center justify-center bg-black p-4">
+        <Card className="w-full max-w-md bg-black border-2 border-red-600">
+          <div className="bg-red-600 text-black text-center py-2 border-b-2 border-red-700">
+            <span className="text-xs font-black tracking-[0.4em] font-stencil">SECURITY ALERT</span>
+          </div>
+          <CardHeader className="border-b-2 border-red-900">
+            <CardTitle className="font-tactical text-2xl text-red-500 tracking-[0.2em]">ACCESS DENIED</CardTitle>
+            <CardDescription className="text-yellow-500 font-stencil tracking-wider">Insufficient security clearance level</CardDescription>
           </CardHeader>
-          <CardContent>
-            <Button asChild variant="outline" className="w-full">
+          <CardContent className="pt-6">
+            <Button asChild variant="outline" className="w-full border-2 border-green-600 text-green-400 hover:bg-green-950 font-stencil tracking-wider">
               <Link href="/">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Map
+                RETURN TO MAP
               </Link>
             </Button>
           </CardContent>
@@ -106,44 +112,62 @@ export default function Admin() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container py-8">
-        <div className="flex items-center justify-between mb-8">
+    <div className="min-h-screen bg-black text-green-400 relative overflow-hidden">
+      {/* Background effects */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-radial from-red-950/10 via-black to-black pointer-events-none" />
+      
+      {/* Corner brackets */}
+      <div className="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-red-500/50 z-10 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-red-500/50 z-10 pointer-events-none" />
+      
+      <div className="container py-8 relative z-20">
+        {/* Classification header */}
+        <div className="bg-red-600 text-black text-center py-2 mb-6 border-2 border-red-700">
+          <span className="text-xs font-black tracking-[0.4em] font-stencil">
+            CLASSIFIED // TOP SECRET // ADMINISTRATIVE ACCESS ONLY
+          </span>
+        </div>
+        
+        <div className="flex items-center justify-between mb-8 border-2 border-red-600 bg-black/80 p-6">
           <div>
-            <h1 className="text-3xl font-bold">Admin Panel</h1>
-            <p className="text-muted-foreground">Manage geo-located events</p>
+            <h1 className="text-4xl font-tactical text-red-500 tracking-[0.3em] drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]">ADMIN PANEL</h1>
+            <p className="text-green-400 font-stencil tracking-[0.2em] text-sm mt-2">[ INCIDENT DATABASE MANAGEMENT SYSTEM ]</p>
           </div>
-          <div className="flex gap-2">
-            <Button onClick={() => setIsCreating(true)}>
+          <div className="flex gap-3">
+            <Button onClick={() => setIsCreating(true)} className="bg-red-600 hover:bg-red-700 text-black font-stencil tracking-wider border-2 border-red-700">
               <Plus className="h-4 w-4 mr-2" />
-              Add Event
+              ADD INCIDENT
             </Button>
-            <Button onClick={() => setShowCSVImport(true)} variant="outline">
+            <Button onClick={() => setShowCSVImport(true)} variant="outline" className="border-2 border-yellow-600 text-yellow-500 hover:bg-yellow-950 font-stencil tracking-wider">
               <Upload className="h-4 w-4 mr-2" />
-              Import CSV
+              IMPORT CSV
             </Button>
-            <Button asChild variant="outline">
+            <Button asChild variant="outline" className="border-2 border-green-600 text-green-400 hover:bg-green-950 font-stencil tracking-wider">
               <Link href="/">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Map
+                RETURN TO MAP
               </Link>
             </Button>
           </div>
         </div>
 
         {eventsLoading ? (
-          <div className="flex justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <div className="flex justify-center py-12 border-2 border-red-600 bg-black/80">
+            <div className="flex flex-col items-center gap-4 p-8">
+              <Loader2 className="h-12 w-12 animate-spin text-red-500" />
+              <p className="text-green-400 font-stencil tracking-[0.3em]">[ ACCESSING DATABASE ]</p>
+            </div>
           </div>
         ) : (
           <div className="grid gap-4">
             {events?.map((event) => (
-              <Card key={event.id}>
+              <Card key={event.id} className="bg-black/80 border-2 border-red-900 hover:border-red-600 transition-colors">
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <CardTitle className="text-xl">{event.title}</CardTitle>
-                      <CardDescription className="mt-1">
+                      <CardTitle className="text-2xl font-tactical text-red-500 tracking-wider">{event.title}</CardTitle>
+                      <CardDescription className="mt-1 text-green-400 font-mono-tech tracking-wider">
                         {event.locationName} • {event.category}
                       </CardDescription>
                     </div>
@@ -152,6 +176,7 @@ export default function Admin() {
                         size="sm"
                         variant="outline"
                         onClick={() => setSelectedEvent(event)}
+                        className="border-2 border-yellow-600 text-yellow-500 hover:bg-yellow-950"
                       >
                         <Pencil className="h-4 w-4" />
                       </Button>
@@ -160,6 +185,7 @@ export default function Admin() {
                         variant="destructive"
                         onClick={() => handleDelete(event.id)}
                         disabled={deleteEvent.isPending}
+                        className="bg-red-600 hover:bg-red-700 border-2 border-red-700"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -167,13 +193,13 @@ export default function Admin() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-muted-foreground line-clamp-2">
+                  <p className="text-sm text-green-400 line-clamp-2 font-mono-tech">
                     {event.description}
                   </p>
-                  <div className="mt-4 flex flex-wrap gap-2 text-xs text-muted-foreground">
-                    <span>📍 {event.latitude}, {event.longitude}</span>
-                    {event.videoUrl && <span>🎥 Video attached</span>}
-                    {event.isCrime && <span className="text-red-500">⚠️ Crime</span>}
+                  <div className="mt-4 flex flex-wrap gap-3 text-xs font-mono">
+                    <span className="text-cyan-400 border border-cyan-900 px-2 py-1">📍 {event.latitude}, {event.longitude}</span>
+                    {event.videoUrl && <span className="text-purple-400 border border-purple-900 px-2 py-1">🎥 VIDEO ATTACHED</span>}
+                    {event.isCrime && <span className="text-red-500 border border-red-600 px-2 py-1 animate-pulse">⚠️ CRIME INCIDENT</span>}
                   </div>
                 </CardContent>
               </Card>
