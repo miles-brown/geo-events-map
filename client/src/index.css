@@ -115,6 +115,19 @@
   --sidebar-ring: oklch(0.75 0.08 145);
 }
 
+:root {
+  /* Z-Index Hierarchy - Mobile & Desktop */
+  --z-map: 0;
+  --z-map-markers: 10;
+  --z-filter-sidebar: 20;
+  --z-stats-overlay: 30;
+  --z-timeline-controls: 40;
+  --z-details-panel: 50;
+  --z-mobile-backdrop: 60;
+  --z-modal: 70;
+  --z-header: 100;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

@@ -36,6 +36,20 @@
       "when": 1764306628160,
       "tag": "0004_next_newton_destine",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1764429698538,
+      "tag": "0005_glamorous_thor",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1764429890001,
+      "tag": "0006_clear_texas_twister",
+      "breakpoints": true
     }
   ]
 }
