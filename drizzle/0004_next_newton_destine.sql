@@ -1,0 +1,1 @@
+ALTER TABLE `events` ADD `borough` varchar(100);

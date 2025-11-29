@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { eq, and, desc, gte, lte, inArray } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, events, InsertEvent, Event } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,193 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// Events query helpers
+
+export async function createEvent(event: InsertEvent & { subcategories?: string[]; tags?: string[] }): Promise<Event> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  // Serialize arrays to JSON strings
+  const eventData = {
+    ...event,
+    subcategories: event.subcategories ? JSON.stringify(event.subcategories) : null,
+    tags: event.tags ? JSON.stringify(event.tags) : null,
+  };
+
+  const result = await db.insert(events).values(eventData);
+  const insertedId = Number(result[0].insertId);
+  
+  const inserted = await db.select().from(events).where(eq(events.id, insertedId)).limit(1);
+  if (!inserted[0]) {
+    throw new Error("Failed to retrieve inserted event");
+  }
+  
+  return parseEventJson(inserted[0]);
+}
+
+// Helper to parse JSON fields in events
+function parseEventJson(event: Event): Event {
+  return {
+    ...event,
+    subcategories: event.subcategories ? JSON.parse(event.subcategories as unknown as string) : null,
+    tags: event.tags ? JSON.parse(event.tags as unknown as string) : null,
+  };
+}
+
+export async function getAllEvents(): Promise<Event[]> {
+  const db = await getDb();
+  if (!db) {
+    return [];
+  }
+
+  const results = await db.select().from(events).orderBy(desc(events.eventDate));
+  return results.map(parseEventJson);
+}
+
+export interface EventFilters {
+  categories?: string[];
+  subcategories?: string[];
+  timePeriod?: "month" | "6months" | "year" | "5years" | "10years" | "all";
+  startDate?: Date;
+  endDate?: Date;
+  boroughs?: string[];
+}
+
+export async function getFilteredEvents(filters: EventFilters): Promise<Event[]> {
+  const db = await getDb();
+  if (!db) {
+    return [];
+  }
+
+  let query = db.select().from(events);
+  const conditions = [];
+
+  // Filter by categories
+  if (filters.categories && filters.categories.length > 0) {
+    conditions.push(inArray(events.category, filters.categories));
+  }
+
+  // Filter by boroughs
+  if (filters.boroughs && filters.boroughs.length > 0) {
+    conditions.push(inArray(events.borough, filters.boroughs));
+  }
+
+  // Filter by time period
+  if (filters.timePeriod && filters.timePeriod !== "all") {
+    const now = new Date();
+    let startDate: Date;
+    
+    switch (filters.timePeriod) {
+      case "month":
+        startDate = new Date(now.setMonth(now.getMonth() - 1));
+        break;
+      case "6months":
+        startDate = new Date(now.setMonth(now.getMonth() - 6));
+        break;
+      case "year":
+        startDate = new Date(now.setFullYear(now.getFullYear() - 1));
+        break;
+      case "5years":
+        startDate = new Date(now.setFullYear(now.getFullYear() - 5));
+        break;
+      case "10years":
+        startDate = new Date(now.setFullYear(now.getFullYear() - 10));
+        break;
+      default:
+        startDate = new Date(0);
+    }
+    conditions.push(gte(events.eventDate, startDate));
+  }
+
+  // Filter by custom date range
+  if (filters.startDate) {
+    conditions.push(gte(events.eventDate, filters.startDate));
+  }
+  if (filters.endDate) {
+    conditions.push(lte(events.eventDate, filters.endDate));
+  }
+
+  // Apply all conditions
+  if (conditions.length > 0) {
+    query = query.where(and(...conditions)) as typeof query;
+  }
+
+  const results = await query.orderBy(desc(events.eventDate));
+  
+  // Filter by subcategories in application layer (since they're stored as JSON)
+  let filteredResults = results;
+  if (filters.subcategories && filters.subcategories.length > 0) {
+    filteredResults = results.filter(event => {
+      if (!event.subcategories) return false;
+      const eventSubcats = JSON.parse(event.subcategories as unknown as string) as string[];
+      return filters.subcategories!.some(sub => eventSubcats.includes(sub));
+    });
+  }
+
+  return filteredResults.map(parseEventJson);
+}
+
+export async function getEventsByCategory(category: string): Promise<Event[]> {
+  const db = await getDb();
+  if (!db) {
+    return [];
+  }
+
+  return db.select().from(events).where(eq(events.category, category)).orderBy(desc(events.eventDate));
+}
+
+export async function getEventById(id: number): Promise<Event | undefined> {
+  const db = await getDb();
+  if (!db) {
+    return undefined;
+  }
+
+  const result = await db.select().from(events).where(eq(events.id, id)).limit(1);
+  return result[0];
+}
+
+export async function updateEvent(id: number, updates: Partial<InsertEvent> & { subcategories?: string[]; tags?: string[] }): Promise<Event | undefined> {
+  const db = await getDb();
+  if (!db) {
+    return undefined;
+  }
+
+  // Serialize arrays to JSON strings
+  const updateData: any = { ...updates };
+  if (updates.subcategories !== undefined) {
+    updateData.subcategories = updates.subcategories ? JSON.stringify(updates.subcategories) : null;
+  }
+  if (updates.tags !== undefined) {
+    updateData.tags = updates.tags ? JSON.stringify(updates.tags) : null;
+  }
+
+  await db.update(events).set(updateData).where(eq(events.id, id));
+  
+  const result = await db.select().from(events).where(eq(events.id, id)).limit(1);
+  return result[0] ? parseEventJson(result[0]) : undefined;
+}
+
+
+
+export async function deleteEvent(id: number): Promise<boolean> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  await db.delete(events).where(eq(events.id, id));
+  return true;
+}
+
+export async function getEventCategories(): Promise<string[]> {
+  const db = await getDb();
+  if (!db) {
+    return [];
+  }
+
+  const result = await db.select({ category: events.category }).from(events);
+  const uniqueCategories = Array.from(new Set(result.map(r => r.category)));
+  return uniqueCategories.sort();
+}
