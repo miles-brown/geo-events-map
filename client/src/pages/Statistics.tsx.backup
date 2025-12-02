@@ -312,10 +312,10 @@ export default function Statistics() {
       <div className="absolute bottom-0 left-0 w-32 h-32 border-b-4 border-l-4 border-red-500 opacity-50 z-20" />
       <div className="absolute bottom-0 right-0 w-32 h-32 border-b-4 border-r-4 border-red-500 opacity-50 z-20" />
 
-      <div className="relative z-10 p-4 md:p-8">
+      <div className="relative z-10 p-8">
         {/* Top security header */}
         <div 
-          className="mb-6 md:mb-8 border-2 md:border-4 border-red-600 bg-black/90 p-4 md:p-6 relative overflow-hidden cursor-pointer"
+          className="mb-8 border-4 border-red-600 bg-black/90 p-6 relative overflow-hidden cursor-pointer"
           onMouseEnter={() => playTacticalBeep()}
         >
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-600 via-yellow-500 to-red-600 animate-pulse" />
@@ -325,9 +325,9 @@ export default function Statistics() {
           
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-4">
-              <Shield className="h-8 w-8 md:h-12 md:w-12 text-red-500 animate-pulse" />
+              <Shield className="h-12 w-12 text-red-500 animate-pulse" />
               <div>
-                <h1 className="text-2xl md:text-4xl font-black text-red-500 tracking-widest uppercase glitch-text">
+                <h1 className="text-4xl font-black text-red-500 tracking-widest uppercase glitch-text">
                   INTELLIGENCE ANALYTICS
                 </h1>
                 <p className="text-green-400 text-sm tracking-[0.3em] mt-1">
@@ -356,11 +356,11 @@ export default function Statistics() {
           </div>
         </div>
 
-        {/* Stat Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
+        {/* Critical stats cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           {/* Total Events */}
           <div 
-            className="bg-black border-2 border-red-600 p-3 md:p-6 relative overflow-hidden group hover:border-red-400 transition-all cursor-pointer"
+            className="bg-black border-2 border-red-600 p-6 relative overflow-hidden group hover:border-red-400 transition-all cursor-pointer"
             onMouseEnter={() => playTacticalBeep()}
           >
             <div className="absolute inset-0 bg-red-950/20" />
@@ -371,7 +371,7 @@ export default function Statistics() {
                 <AlertTriangle className="h-5 w-5 text-yellow-500 animate-pulse" />
               </div>
               <p className="text-red-400 text-xs uppercase tracking-[0.3em] mb-2">TOTAL INCIDENTS</p>
-              <p className="text-3xl md:text-5xl font-black text-red-500 tracking-wider">{stats.total}</p>
+              <p className="text-5xl font-black text-red-500 tracking-wider">{stats.total}</p>
               <div className="mt-3 text-[10px] text-gray-600 tracking-widest">
                 THREAT LEVEL: ELEVATED
               </div>
@@ -380,7 +380,7 @@ export default function Statistics() {
 
           {/* Categories */}
           <div 
-            className="bg-black border-2 border-yellow-600 p-3 md:p-6 relative overflow-hidden group hover:border-yellow-400 transition-all cursor-pointer"
+            className="bg-black border-2 border-yellow-600 p-6 relative overflow-hidden group hover:border-yellow-400 transition-all cursor-pointer"
             onMouseEnter={() => playTacticalBeep()}
           >
             <div className="absolute inset-0 bg-yellow-950/20" />
@@ -391,7 +391,7 @@ export default function Statistics() {
                 <div className="w-2 h-2 bg-yellow-500 rounded-full animate-ping" />
               </div>
               <p className="text-yellow-400 text-xs uppercase tracking-[0.3em] mb-2">CATEGORIES</p>
-              <p className="text-3xl md:text-5xl font-black text-yellow-500 tracking-wider">{stats.byCategory.length}</p>
+              <p className="text-5xl font-black text-yellow-500 tracking-wider">{stats.byCategory.length}</p>
               <div className="mt-3 text-[10px] text-gray-600 tracking-widest">
                 CLASSIFICATION TYPES
               </div>
@@ -400,7 +400,7 @@ export default function Statistics() {
 
           {/* Boroughs */}
           <div 
-            className="bg-black border-2 border-green-600 p-3 md:p-6 relative overflow-hidden group hover:border-green-400 transition-all cursor-pointer"
+            className="bg-black border-2 border-green-600 p-6 relative overflow-hidden group hover:border-green-400 transition-all cursor-pointer"
             onMouseEnter={() => playTacticalBeep()}
           >
             <div className="absolute inset-0 bg-green-950/20" />
@@ -411,7 +411,7 @@ export default function Statistics() {
                 <div className="text-[10px] text-green-500 tracking-widest">ACTIVE</div>
               </div>
               <p className="text-green-400 text-xs uppercase tracking-[0.3em] mb-2">LOCATIONS</p>
-              <p className="text-3xl md:text-5xl font-black text-green-500 tracking-wider">{stats.byBorough.length}</p>
+              <p className="text-5xl font-black text-green-500 tracking-wider">{stats.byBorough.length}</p>
               <div className="mt-3 text-[10px] text-gray-600 tracking-widest">
                 GEOGRAPHIC ZONES
               </div>
@@ -420,7 +420,7 @@ export default function Statistics() {
 
           {/* Time Span */}
           <div 
-            className="bg-black border-2 border-cyan-600 p-3 md:p-6 relative overflow-hidden group hover:border-cyan-400 transition-all cursor-pointer"
+            className="bg-black border-2 border-cyan-600 p-6 relative overflow-hidden group hover:border-cyan-400 transition-all cursor-pointer"
             onMouseEnter={() => playTacticalBeep()}
           >
             <div className="absolute inset-0 bg-cyan-950/20" />
@@ -431,7 +431,7 @@ export default function Statistics() {
                 <div className="text-[10px] text-cyan-500 tracking-widest animate-pulse">LIVE</div>
               </div>
               <p className="text-cyan-400 text-xs uppercase tracking-[0.3em] mb-2">TIME SPAN</p>
-              <p className="text-3xl md:text-5xl font-black text-cyan-500 tracking-wider">{stats.byMonth.length}<span className="text-xl md:text-2xl">mo</span></p>
+              <p className="text-5xl font-black text-cyan-500 tracking-wider">{stats.byMonth.length}<span className="text-2xl">mo</span></p>
               <div className="mt-3 text-[10px] text-gray-600 tracking-widest">
                 TEMPORAL COVERAGE
               </div>
@@ -440,10 +440,10 @@ export default function Statistics() {
         </div>
 
         {/* Charts Grid */}
-        <div className="grid grid-cols-1 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Events by Category - Pie Chart */}
           <div 
-            className="bg-black border-2 border-red-600 p-4 md:p-6 relative overflow-hidden cursor-pointer"
+            className="bg-black border-2 border-red-600 p-6 relative overflow-hidden cursor-pointer"
             onMouseEnter={() => playDataSound()}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-red-950/20 to-transparent" />
@@ -452,7 +452,7 @@ export default function Statistics() {
             </div>
             <div className="relative z-10">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg md:text-xl font-black text-red-500 uppercase tracking-[0.2em] md:tracking-[0.3em]">
+                <h2 className="text-xl font-black text-red-500 uppercase tracking-[0.3em]">
                   INCIDENT DISTRIBUTION
                 </h2>
                 <div className="flex items-center gap-2 text-[10px] text-red-500">

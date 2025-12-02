@@ -41,17 +41,17 @@ export default function Admin() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-black p-4">
+      <div className="min-h-screen flex items-center justify-center bg-black p-3 md:p-4">
         <Card className="w-full max-w-md bg-black border-2 border-red-600">
-          <CardHeader className="border-b-2 border-red-900">
-            <CardTitle className="font-tactical text-2xl text-red-500 tracking-[0.2em]">ADMIN ACCESS REQUIRED</CardTitle>
+          <CardHeader className="border-b-2 border-red-900 p-4 md:p-6">
+            <CardTitle className="font-tactical text-xl md:text-2xl text-red-500 tracking-[0.1em] md:tracking-[0.2em]">ADMIN ACCESS REQUIRED</CardTitle>
             <CardDescription className="text-green-400 font-stencil tracking-wider">Authentication credentials needed</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4 pt-6">
-            <Button asChild className="w-full bg-red-600 hover:bg-red-700 text-black font-stencil tracking-wider border-2 border-red-700">
+          <CardContent className="space-y-4 pt-4 md:pt-6 p-4 md:p-6">
+            <Button asChild className="w-full h-12 md:h-auto bg-red-600 hover:bg-red-700 text-black font-stencil tracking-wider border-2 border-red-700 text-sm md:text-base">
               <a href={getLoginUrl()}>AUTHENTICATE</a>
             </Button>
-            <Button asChild variant="outline" className="w-full border-2 border-green-600 text-green-400 hover:bg-green-950 font-stencil tracking-wider">
+            <Button asChild variant="outline" className="w-full h-12 md:h-auto border-2 border-green-600 text-green-400 hover:bg-green-950 font-stencil tracking-wider text-sm md:text-base">
               <Link href="/">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 RETURN TO MAP
@@ -66,17 +66,17 @@ export default function Admin() {
   // Check if user is admin
   if (user?.role !== "admin") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-black p-4">
+      <div className="min-h-screen flex items-center justify-center bg-black p-3 md:p-4">
         <Card className="w-full max-w-md bg-black border-2 border-red-600">
           <div className="bg-red-600 text-black text-center py-2 border-b-2 border-red-700">
             <span className="text-xs font-black tracking-[0.4em] font-stencil">SECURITY ALERT</span>
           </div>
-          <CardHeader className="border-b-2 border-red-900">
-            <CardTitle className="font-tactical text-2xl text-red-500 tracking-[0.2em]">ACCESS DENIED</CardTitle>
+          <CardHeader className="border-b-2 border-red-900 p-4 md:p-6">
+            <CardTitle className="font-tactical text-xl md:text-2xl text-red-500 tracking-[0.1em] md:tracking-[0.2em]">ACCESS DENIED</CardTitle>
             <CardDescription className="text-yellow-500 font-stencil tracking-wider">Insufficient security clearance level</CardDescription>
           </CardHeader>
           <CardContent className="pt-6">
-            <Button asChild variant="outline" className="w-full border-2 border-green-600 text-green-400 hover:bg-green-950 font-stencil tracking-wider">
+            <Button asChild variant="outline" className="w-full h-12 md:h-auto border-2 border-green-600 text-green-400 hover:bg-green-950 font-stencil tracking-wider text-sm md:text-base">
               <Link href="/">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 RETURN TO MAP
@@ -121,7 +121,7 @@ export default function Admin() {
       <div className="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-red-500/50 z-10 pointer-events-none" />
       <div className="absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-red-500/50 z-10 pointer-events-none" />
       
-      <div className="container py-8 relative z-20">
+      <div className="container py-4 md:py-8 relative z-20 px-3 md:px-4">
         {/* Classification header */}
         <div className="bg-red-600 text-black text-center py-2 mb-6 border-2 border-red-700">
           <span className="text-xs font-black tracking-[0.4em] font-stencil">
@@ -129,21 +129,21 @@ export default function Admin() {
           </span>
         </div>
         
-        <div className="flex items-center justify-between mb-8 border-2 border-red-600 bg-black/80 p-6">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6 md:mb-8 border-2 border-red-600 bg-black/80 p-4 md:p-6">
           <div>
-            <h1 className="text-4xl font-tactical text-red-500 tracking-[0.3em] drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]">ADMIN PANEL</h1>
-            <p className="text-green-400 font-stencil tracking-[0.2em] text-sm mt-2">[ INCIDENT DATABASE MANAGEMENT SYSTEM ]</p>
+            <h1 className="text-2xl md:text-4xl font-tactical text-red-500 tracking-[0.1em] md:tracking-[0.3em] drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]">ADMIN PANEL</h1>
+            <p className="text-green-400 font-stencil tracking-[0.05em] md:tracking-[0.2em] text-xs md:text-sm mt-2">[ INCIDENT DATABASE MANAGEMENT SYSTEM ]</p>
           </div>
-          <div className="flex gap-3">
-            <Button onClick={() => setIsCreating(true)} className="bg-red-600 hover:bg-red-700 text-black font-stencil tracking-wider border-2 border-red-700">
+          <div className="flex flex-col md:flex-row gap-2 md:gap-3 w-full md:w-auto">
+            <Button onClick={() => setIsCreating(true)} className="h-12 md:h-auto bg-red-600 hover:bg-red-700 text-black font-stencil tracking-wider border-2 border-red-700 text-sm md:text-base w-full md:w-auto">
               <Plus className="h-4 w-4 mr-2" />
               ADD INCIDENT
             </Button>
-            <Button onClick={() => setShowCSVImport(true)} variant="outline" className="border-2 border-yellow-600 text-yellow-500 hover:bg-yellow-950 font-stencil tracking-wider">
+            <Button onClick={() => setShowCSVImport(true)} variant="outline" className="h-12 md:h-auto border-2 border-yellow-600 text-yellow-500 hover:bg-yellow-950 font-stencil tracking-wider text-sm md:text-base w-full md:w-auto">
               <Upload className="h-4 w-4 mr-2" />
               IMPORT CSV
             </Button>
-            <Button asChild variant="outline" className="border-2 border-green-600 text-green-400 hover:bg-green-950 font-stencil tracking-wider">
+            <Button asChild variant="outline" className="h-12 md:h-auto border-2 border-green-600 text-green-400 hover:bg-green-950 font-stencil tracking-wider text-sm md:text-base w-full md:w-auto">
               <Link href="/">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 RETURN TO MAP
@@ -163,15 +163,15 @@ export default function Admin() {
           <div className="grid gap-4">
             {events?.map((event) => (
               <Card key={event.id} className="bg-black/80 border-2 border-red-900 hover:border-red-600 transition-colors">
-                <CardHeader>
+                <CardHeader className="p-4 md:p-6">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <CardTitle className="text-2xl font-tactical text-red-500 tracking-wider">{event.title}</CardTitle>
+                      <CardTitle className="text-lg md:text-2xl font-tactical text-red-500 tracking-wider">{event.title}</CardTitle>
                       <CardDescription className="mt-1 text-green-400 font-mono-tech tracking-wider">
                         {event.locationName} • {event.category}
                       </CardDescription>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-1 md:gap-2">
                       <Button
                         size="sm"
                         variant="outline"
@@ -192,7 +192,7 @@ export default function Admin() {
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-4 md:p-6">
                   <p className="text-sm text-green-400 line-clamp-2 font-mono-tech">
                     {event.description}
                   </p>
