@@ -8,6 +8,13 @@
       "when": 1764446196933,
       "tag": "0000_real_bastion",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1764710239435,
+      "tag": "0001_third_golden_guardian",
+      "breakpoints": true
     }
   ]
 }

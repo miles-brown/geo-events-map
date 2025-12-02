@@ -9,6 +9,9 @@ import { integer, pgEnum, pgTable, text, timestamp, varchar, boolean } from "dri
 // Define role enum for PostgreSQL
 export const roleEnum = pgEnum("role", ["user", "admin"]);
 
+// Define status enum for event approval workflow
+export const statusEnum = pgEnum("status", ["pending", "approved", "rejected"]);
+
 export const users = pgTable("users", {
   /**
    * Surrogate primary key. Auto-incremented numeric value managed by the database.
@@ -38,35 +41,83 @@ export const events = pgTable("events", {
   // Event details
   title: varchar("title", { length: 255 }).notNull(),
   description: text("description").notNull(),
-  category: varchar("category", { length: 100 }).notNull(), // Primary category e.g., "crime", "transport", "fire"
-  subcategories: text("subcategories"), // JSON array of subcategory IDs e.g., ["fights", "brawls"]
-  tags: text("tags"), // JSON array of additional tags for flexible categorization
-  eventDate: timestamp("eventDate").notNull(), // When the event occurred
+  category: varchar("category", { length: 100 }).notNull(),
+  subcategories: text("subcategories"), // JSON array
+  tags: text("tags"), // JSON array
+  eventDate: timestamp("event_date").notNull(),
+  timeOfDay: varchar("time_of_day", { length: 20 }), // "morning", "afternoon", "evening", "night"
+  dayOfWeek: varchar("day_of_week", { length: 20 }), // "monday", "tuesday", etc.
   
-  // Location data
-  latitude: varchar("latitude", { length: 50 }).notNull(), // Store as string to avoid precision issues
+  // Comprehensive Location Data
+  latitude: varchar("latitude", { length: 50 }).notNull(),
   longitude: varchar("longitude", { length: 50 }).notNull(),
-  locationName: varchar("locationName", { length: 255 }).notNull(), // e.g., "Camden Town, London"
-  borough: varchar("borough", { length: 100 }), // London Borough e.g., "Camden", "Westminster"
+  locationName: varchar("location_name", { length: 255 }).notNull(),
+  fullAddress: text("full_address"), // Complete address string
+  streetAddress: varchar("street_address", { length: 255 }), // Street name and number
+  postcode: varchar("postcode", { length: 20 }), // UK postcode
+  borough: varchar("borough", { length: 100 }), // London Borough
+  district: varchar("district", { length: 100 }), // District/neighborhood
+  ward: varchar("ward", { length: 100 }), // Electoral ward
+  venueName: varchar("venue_name", { length: 255 }), // Specific venue/shop/landmark
+  venueType: varchar("venue_type", { length: 100 }), // "shop", "restaurant", "station", "park", etc.
+  nearbyLandmarks: text("nearby_landmarks"), // JSON array of nearby points of interest
   
-  // Media
-  videoUrl: text("videoUrl"), // URL to the video source (optional)
-  thumbnailUrl: text("thumbnailUrl"), // Optional thumbnail image
+  // Video & Media Metadata
+  videoUrl: text("video_url"),
+  thumbnailUrl: text("thumbnail_url"),
+  videoDuration: integer("video_duration"), // Duration in seconds
+  videoQuality: varchar("video_quality", { length: 20 }), // "720p", "1080p", etc.
+  platform: varchar("platform", { length: 50 }), // "instagram", "tiktok", "twitter"
+  platformVideoId: varchar("platform_video_id", { length: 255 }), // Original platform video ID
   
-  // Additional context
-  sourceUrl: text("sourceUrl"), // Original source URL
-  peopleInvolved: text("peopleInvolved"), // Names or descriptions of people involved
-  backgroundInfo: text("backgroundInfo"), // Additional context and background
-  details: text("details"), // Specific details about the event
+  // Social Media Metadata
+  sourceUrl: text("source_url"),
+  authorUsername: varchar("author_username", { length: 255 }),
+  authorName: varchar("author_name", { length: 255 }),
+  authorFollowers: integer("author_followers"),
+  videoViews: integer("video_views"),
+  videoLikes: integer("video_likes"),
+  videoShares: integer("video_shares"),
+  videoComments: integer("video_comments"),
+  hashtags: text("hashtags"), // JSON array
+  mentions: text("mentions"), // JSON array
+  caption: text("caption"), // Original video caption/description
   
-  // Flags
-  isCrime: boolean("isCrime").default(false).notNull(),
-  isVerified: boolean("isVerified").default(false).notNull(), // Whether the event has been verified
+  // Event Context
+  peopleInvolved: text("people_involved"),
+  numberOfPeople: integer("number_of_people"), // Estimated number of people in video
+  vehiclesInvolved: text("vehicles_involved"), // Description of vehicles
+  weaponsInvolved: text("weapons_involved"), // If applicable
+  injuries: text("injuries"), // Description of injuries if any
+  policeInvolvement: boolean("police_involvement").default(false),
+  emergencyServices: text("emergency_services"), // "police", "ambulance", "fire", etc.
+  
+  // Environmental Context
+  weatherConditions: varchar("weather_conditions", { length: 100 }),
+  lighting: varchar("lighting", { length: 50 }), // "daylight", "dark", "streetlit"
+  crowdSize: varchar("crowd_size", { length: 50 }), // "small", "medium", "large"
+  
+  // Additional Details
+  backgroundInfo: text("background_info"),
+  details: text("details"),
+  outcome: text("outcome"), // What happened as a result
+  relatedIncidents: text("related_incidents"), // JSON array of related event IDs
+  
+  // Verification & Credibility
+  isCrime: boolean("is_crime").default(false).notNull(),
+  isVerified: boolean("is_verified").default(false).notNull(),
+  verifiedBy: integer("verified_by"), // User ID who verified
+  verifiedAt: timestamp("verified_at"),
+  credibilityScore: integer("credibility_score"), // 0-100
+  sourceReliability: varchar("source_reliability", { length: 50 }), // "high", "medium", "low"
+  status: varchar("status", { length: 20 }).default("pending").notNull(),
   
   // Metadata
-  createdBy: integer("createdBy").notNull(), // User ID who created this event
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+  createdBy: integer("created_by").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  lastEditedBy: integer("last_edited_by"),
+  lastEditedAt: timestamp("last_edited_at"),
 });
 
 export type Event = typeof events.$inferSelect;

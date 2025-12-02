@@ -8,9 +8,11 @@ import { TRPCError } from "@trpc/server";
 import { storagePut } from "./storage";
 import { nanoid } from "nanoid";
 import { CATEGORIES, TIME_PERIODS } from "@shared/categories";
+import { videoRouter } from "./videoRouter";
 
 export const appRouter = router({
   system: systemRouter,
+  videos: videoRouter,
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {

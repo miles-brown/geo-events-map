@@ -4,10 +4,11 @@ import { getLoginUrl } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Plus, Pencil, Trash2, ArrowLeft, Upload } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, ArrowLeft, Upload, Video } from "lucide-react";
 import { Link } from "wouter";
 import EventForm from "@/components/admin/EventForm";
 import CSVImport from "@/components/admin/CSVImport";
+import VideoSubmission from "@/components/admin/VideoSubmission";
 import { Event } from "../../../drizzle/schema";
 import { toast } from "sonner";
 
@@ -16,6 +17,7 @@ export default function Admin() {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [showCSVImport, setShowCSVImport] = useState(false);
+  const [showVideoSubmission, setShowVideoSubmission] = useState(false);
 
   const { data: events, isLoading: eventsLoading, refetch } = trpc.events.list.useQuery();
   const deleteEvent = trpc.events.delete.useMutation({
@@ -135,9 +137,13 @@ export default function Admin() {
             <p className="text-green-400 font-stencil tracking-[0.05em] md:tracking-[0.2em] text-xs md:text-sm mt-2">[ INCIDENT DATABASE MANAGEMENT SYSTEM ]</p>
           </div>
           <div className="flex flex-col md:flex-row gap-2 md:gap-3 w-full md:w-auto">
-            <Button onClick={() => setIsCreating(true)} className="h-12 md:h-auto bg-red-600 hover:bg-red-700 text-black font-stencil tracking-wider border-2 border-red-700 text-sm md:text-base w-full md:w-auto">
+            <Button onClick={() => setShowVideoSubmission(true)} className="h-12 md:h-auto bg-red-600 hover:bg-red-700 text-black font-stencil tracking-wider border-2 border-red-700 text-sm md:text-base w-full md:w-auto">
+              <Video className="h-4 w-4 mr-2" />
+              SUBMIT VIDEO
+            </Button>
+            <Button onClick={() => setIsCreating(true)} variant="outline" className="h-12 md:h-auto border-2 border-cyan-600 text-cyan-400 hover:bg-cyan-950 font-stencil tracking-wider text-sm md:text-base w-full md:w-auto">
               <Plus className="h-4 w-4 mr-2" />
-              ADD INCIDENT
+              ADD MANUAL
             </Button>
             <Button onClick={() => setShowCSVImport(true)} variant="outline" className="h-12 md:h-auto border-2 border-yellow-600 text-yellow-500 hover:bg-yellow-950 font-stencil tracking-wider text-sm md:text-base w-full md:w-auto">
               <Upload className="h-4 w-4 mr-2" />
@@ -207,6 +213,17 @@ export default function Admin() {
           </div>
         )}
       </div>
+      
+      {/* Video Submission Modal */}
+      {showVideoSubmission && (
+        <VideoSubmission
+          onClose={() => setShowVideoSubmission(false)}
+          onSuccess={() => {
+            setShowVideoSubmission(false);
+            refetch();
+          }}
+        />
+      )}
       
       {/* CSV Import Modal */}
       {showCSVImport && (

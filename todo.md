@@ -68,3 +68,75 @@
 - [x] Push database schema to Supabase (tables already exist)
 - [x] Verify database connection
 - [x] Test application with Supabase database
+
+
+## Manual Video Submission System (URL-based)
+
+### Phase 1: Research & Architecture
+- [x] Research Instagram video scraping APIs (Firecrawl MCP)
+- [x] Research TikTok video scraping APIs
+- [x] Research X/Twitter video scraping APIs (Twitter Data API)
+- [x] Design database schema for pending submissions (add status field)
+- [x] Plan AI analysis workflow (location detection, categorization)
+
+### Phase 2: Admin Submission Interface
+- [x] Create "Submit Video" page in admin panel
+- [x] Build URL input form with platform detection (Instagram/TikTok/X)
+- [x] Add loading states and progress indicators
+- [x] Display preview of extracted metadata
+
+### Phase 3: Backend Video Processing
+- [x] Create tRPC endpoint for video URL submission
+- [x] Implement video metadata extraction for each platform
+- [ ] Build video download and S3 upload functionality
+- [x] Extract captions, descriptions, tags, timestamps
+
+### Phase 4: AI-Powered Analysis
+- [ ] Implement AI location detection from video text/captions
+- [ ] Build AI event categorization (Crime, Strange, Paranormal, etc.)
+- [ ] Extract people involved and event details using LLM
+- [ ] Integrate Google Maps Geocoding for location validation
+- [ ] Handle cases where location is ambiguous (default to London)
+
+### Phase 5: Review Queue & Approval
+- [ ] Add "status" field to events table (pending, approved, rejected)
+- [ ] Create pending submissions view in admin panel
+- [ ] Build approval/rejection workflow with edit capabilities
+- [ ] Add bulk approval functionality
+
+### Phase 6: Testing & Delivery
+- [ ] Test with real Instagram video URLs
+- [ ] Test with real TikTok video URLs
+- [ ] Test with real X/Twitter video URLs
+- [ ] Verify AI analysis accuracy
+- [ ] Test end-to-end workflow from submission to map display
+- [ ] Create documentation for video submission process
+
+
+## Enhanced Schema & Metadata Extraction
+
+### Database Schema Enhancements
+- [x] Add comprehensive video metadata fields (duration, views, likes, shares, platform-specific IDs)
+- [x] Add detailed location fields (full address, postcode, district, venue name, landmark)
+- [x] Add temporal fields (time of day, day of week, season)
+- [x] Add event context fields (weather conditions, witnesses, police involvement)
+- [x] Add social media engagement metrics
+- [x] Add verification and credibility fields
+- [x] Apply schema changes to Supabase
+
+### AI Extraction Enhancements
+- [x] Extract video duration and technical metadata
+- [x] Parse full address from captions/descriptions
+- [x] Identify venue/shop/landmark names
+- [x] Extract time of day and temporal context
+- [x] Detect weather conditions from text
+- [x] Identify number of people involved
+- [x] Extract hashtags and mentions
+- [ ] Calculate engagement metrics
+
+### Geocoding Enhancements
+- [ ] Implement Google Maps Geocoding API integration
+- [ ] Extract full address components (street, postcode, district)
+- [ ] Identify London borough from coordinates
+- [ ] Find nearby landmarks
+- [ ] Validate and normalize location data
